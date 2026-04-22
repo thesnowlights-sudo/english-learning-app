@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>英語学習</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;background:#f5f3ee;color:#2c2c2a;min-height:100vh;}
+
+/* ---- Screens ---- */
+.screen{display:none;min-height:100vh;padding-bottom:80px;}
+.screen.active{display:block;}
+
+/* ---- Topbar ---- */
+.topbar{background:#fff;padding:16px 20px 12px;border-bottom:0.5px solid #e0ddd5;position:sticky;top:0;z-index:10;}
+.topbar-sub{font-size:11px;color:#888780;letter-spacing:.04em;margin-bottom:2px;}
+.topbar-title{font-size:18px;font-weight:600;color:#2c2c2a;}
+
+/* ---- Content ---- */
+.content{padding:16px 16px 0;}
+
+/* ---- Cards ---- */
+.card{background:#fff;border-radius:16px;padding:18px 20px;margin-bottom:12px;border:0.5px solid #e5e2da;}
+.card-label{font-size:11px;color:#888780;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.card-big{font-size:26px;font-weight:700;color:#2c2c2a;}
+.card-sub{font-size:14px;color:#5f5e5a;margin-top:4px;line-height:1.55;}
+
+/* ---- Progress bar ---- */
+.pbar{background:#ede9e0;border-radius:8px;height:7px;margin:10px 0 4px;overflow:hidden;}
+.pbar-fill{background:#4a7d1a;height:100%;border-radius:8px;transition:width .4s;}
+.pbar-label{font-size:11px;color:#888780;}
+
+/* ---- Week dots ---- */
+.dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+.dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+.dot-done{background:#c5df98;color:#3a6c10;}
+.dot-now{background:#4a7d1a;color:#fff;}
+.dot-future{background:#ede9e0;color:#999;}
+
+/* ---- Buttons ---- */
+.btn{display:block;width:100%;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:600;cursor:pointer;text-align:center;transition:opacity .15s,transform .1s;}
+.btn:active{transform:scale(.97);opacity:.85;}
+.btn+.btn{margin-top:10px;}
+.btn-green{background:#4a7d1a;color:#fff;}
+.btn-gray{background:#ede9e0;color:#2c2c2a;}
+.btn-outline{background:#fff;color:#4a7d1a;border:1.5px solid #4a7d1a;padding:12px;}
+.btn-outline-gray{background:#fff;color:#5f5e5a;border:1.5px solid #c5c3bb;padding:12px;}
+.btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+
+/* ---- Done badge ---- */
+.badge-done{display:inline-block;background:#c5df98;color:#3a6c10;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;}
+
+/* ---- Bottom nav ---- */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #e5e2da;display:flex;padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:100;}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;}
+.bnav-icon{font-size:22px;color:#aaa9a0;}
+.bnav-label{font-size:10px;color:#aaa9a0;}
+.bnav-item.on .bnav-icon,.bnav-item.on .bnav-label{color:#4a7d1a;}
+.bnav-item.on .bnav-label{font-weight:700;}
+
+/* ---- Time Attack ---- */
+.phrase-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;margin-bottom:20px;border:0.5px solid #e5e2da;min-height:170px;display:flex;flex-direction:column;justify-content:center;}
+.phrase-jp{font-size:22px;font-weight:700;color:#2c2c2a;line-height:1.4;}
+.phrase-en{font-size:17px;font-weight:600;color:#4a7d1a;margin-top:16px;display:none;line-height:1.4;}
+.phrase-en.show{display:block;}
+
+/* ---- Timer ring ---- */
+.ring-wrap{width:130px;height:130px;margin:0 auto 20px;position:relative;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-track{fill:none;stroke:#ede9e0;stroke-width:9;}
+.ring-fill{fill:none;stroke:#4a7d1a;stroke-width:9;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .3s;}
+.ring-fill.urgent{stroke:#e24b4a;}
+.ring-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:34px;font-weight:700;color:#2c2c2a;font-variant-numeric:tabular-nums;}
+.ring-num.urgent{color:#e24b4a;}
+
+/* ---- Scores ---- */
+.score-row{display:flex;justify-content:center;gap:28px;margin-bottom:16px;}
+.score-item{text-align:center;}
+.score-val{font-size:30px;font-weight:700;color:#2c2c2a;}
+.score-lbl{font-size:11px;color:#888780;margin-top:2px;}
+
+/* ---- Speech ---- */
+.transcript{background:#ede9e0;border-radius:12px;padding:16px;min-height:100px;font-size:15px;color:#5f5e5a;line-height:1.7;margin-top:16px;white-space:pre-wrap;}
+.rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#e24b4a;margin-right:6px;animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* ---- Settings ---- */
+.set-label{font-size:13px;font-weight:600;color:#5f5e5a;margin-bottom:6px;}
+.set-input{width:100%;padding:12px;border:0.5px solid #e0ddd5;border-radius:10px;font-size:14px;background:#fff;color:#2c2c2a;margin-bottom:16px;}
+.set-input:focus{outline:none;border-color:#4a7d1a;}
+
+/* ---- Empty / Status ---- */
+.empty{text-align:center;padding:40px 20px;color:#888780;}
+.empty-icon{font-size:44px;margin-bottom:12px;}
+.empty-text{font-size:15px;line-height:1.6;}
+.status-msg{text-align:center;font-size:14px;color:#888780;padding:10px;}
+.status-msg.ok{color:#4a7d1a;}
+.status-msg.err{color:#e24b4a;}
+
+/* ---- Result card ---- */
+.result-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;border:0.5px solid #e5e2da;margin-bottom:16px;}
+.result-score{font-size:56px;font-weight:800;line-height:1;}
+.result-label{font-size:14px;color:#5f5e5a;margin-top:8px;}
+.result-msg{font-size:15px;margin-top:16px;line-height:1.6;color:#2c2c2a;}
+</style>
+</head>
+<body>
+
+<!-- ============ HOME ============ -->
+<div class="screen active" id="screen-home">
+  <div class="topbar">
+    <div class="topbar-sub">English Learning</div>
+    <div class="topbar-title" id="home-title">読み込み中...</div>
+  </div>
+  <div class="content" id="home-content">
+    <div class="status-msg">データを取得しています...</div>
+  </div>
+</div>
+
+<!-- ============ TIME ATTACK ============ -->
+<div class="screen" id="screen-attack">
+  <div class="topbar">
+    <div class="topbar-sub">Phrase_JP → Phrase_EN / 10秒</div>
+    <div class="topbar-title">タイムアタック</div>
+  </div>
+  <div class="content" id="attack-content">
+    <div class="status-msg">読み込み中...</div>
+  </div>
+</div>
+
+<!-- ============ SPEECH ============ -->
+<div class="screen" id="screen-speech">
+  <div class="topbar">
+    <div class="topbar-sub">Recording & Transcript</div>
+    <div class="topbar-title">1分スピーチ</div>
+  </div>
+  <div class="content">
+    <div class="ring-wrap" style="margin-top:8px;">
+      <svg viewBox="0 0 130 130" width="130" height="130">
+        <circle class="ring-track" cx="65" cy="65" r="56"/>
+        <circle class="ring-fill" id="speech-ring" cx="65" cy="65" r="56"
+          stroke-dasharray="351.9" stroke-dashoffset="0"/>
+      </svg>
+      <div class="ring-num" id="speech-num">1:00</div>
+    </div>
+    <button class="btn btn-green" id="speech-btn" onclick="toggleSpeech()">録音開始</button>
+    <button class="btn btn-gray" style="margin-top:10px" onclick="resetSpeech()">リセット</button>
+    <div class="transcript" id="transcript">ここに文字起こしが表示されます...</div>
+  </div>
+</div>
+
+<!-- ============ SETTINGS ============ -->
+<div class="screen" id="screen-settings">
+  <div class="topbar">
+    <div class="topbar-title">設定</div>
+  </div>
+  <div class="content" style="padding-top:20px;">
+    <div class="set-label">学習開始日（Week1の月曜日）</div>
+    <input type="date" class="set-input" id="s-start">
+
+    <div class="set-label">Google Apps Script URL</div>
+    <input type="url" class="set-input" id="s-gas" placeholder="https://script.google.com/macros/s/...">
+
+    <div class="set-label">GPT リンク</div>
+    <input type="url" class="set-input" id="s-gpt" placeholder="https://chat.openai.com">
+
+    <div class="set-label">GSS リンク</div>
+    <input type="url" class="set-input" id="s-gss" placeholder="https://docs.google.com/spreadsheets/...">
+
+    <button class="btn btn-green" onclick="saveSettings()">保存する</button>
+    <div id="settings-status" class="status-msg"></div>
+
+    <div style="margin-top:24px;padding-top:24px;border-top:0.5px solid #e5e2da;">
+      <div class="set-label" style="margin-bottom:8px;">ヘルプ</div>
+      <div style="font-size:13px;color:#888780;line-height:1.7;">
+        1. GoogleスプレッドシートにCode.gsをコピー<br>
+        2. <code>setupSheets()</code>を実行してシートを初期化<br>
+        3. 「ウェブアプリとして導入」でURLを取得<br>
+        4. 上のGAS URLに貼り付けて保存
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bnav">
+  <div class="bnav-item on" id="nav-home" onclick="showScreen('home')">
+    <div class="bnav-icon">🏠</div><div class="bnav-label">ホーム</div>
+  </div>
+  <div class="bnav-item" id="nav-attack" onclick="showScreen('attack')">
+    <div class="bnav-icon">⚡</div><div class="bnav-label">タイムアタック</div>
+  </div>
+  <div class="bnav-item" id="nav-speech" onclick="showScreen('speech')">
+    <div class="bnav-icon">🎙️</div><div class="bnav-label">スピーチ</div>
+  </div>
+  <div class="bnav-item" id="nav-settings" onclick="showScreen('settings')">
+    <div class="bnav-icon">⚙️</div><div class="bnav-label">設定</div>
+  </div>
+</nav>
+
+<script>
+// =============================================
+//  CONSTANTS
+// =============================================
+const WEEKS = [
+  {w:1, theme:'Indian food（基本）'},
+  {w:2, theme:'Indian food（文化・応用）'},
+  {w:3, theme:'Travel（行きたい理由）'},
+  {w:4, theme:'India trip（実践）'},
+  {w:5, theme:'Daily life（会話）'},
+  {w:6, theme:'Making friends（雑談）'},
+  {w:7, theme:'My story（自分の話）'},
+  {w:8, theme:'ロールプレイ（実戦）'},
+];
+
+const DAY = ['日','月','火','水','木','金','土'];
+
+const TASKS = {
+  1:{label:'インプット＋収集', desc:'GPTと日本語で会話してフレーズを収集し、GSSに記録する', links:['gpt','gss']},
+  2:{label:'軽く使う', desc:'GSSのフレーズを読んで1〜2文作る。声に出す', links:['gss','attack']},
+  3:{label:'会話（メイン）', desc:'GPTと3〜5分英語で会話。新しく出た表現をGSSに追加', links:['gpt','gss']},
+  4:{label:'復習', desc:'今週のフレーズを音読。タイムアタックで定着を確認する', links:['attack']},
+  5:{label:'長めに話す', desc:'1分スピーチ。今週の表現を全部使う意識で話し続ける', links:['speech']},
+};
+
+const CIRC_SMALL = 2 * Math.PI * 52;   // attack ring r=52
+const CIRC_BIG   = 2 * Math.PI * 56;   // speech ring r=56
+
+// =============================================
+//  CONFIG (localStorage)
+// =============================================
+let cfg = {};
+function loadCfg() {
+  cfg = {
+    startDate: localStorage.getItem('startDate') || '',
+    gasUrl:    localStorage.getItem('gasUrl')    || '',
+    gptUrl:    localStorage.getItem('gptUrl')    || 'https://chat.openai.com',
+    gssUrl:    localStorage.getItem('gssUrl')    || '',
+  };
+}
+function saveSettings() {
+  cfg.startDate = document.getElementById('s-start').value;
+  cfg.gasUrl    = document.getElementById('s-gas').value.trim();
+  cfg.gptUrl    = document.getElementById('s-gpt').value.trim() || 'https://chat.openai.com';
+  cfg.gssUrl    = document.getElementById('s-gss').value.trim();
+  localStorage.setItem('startDate', cfg.startDate);
+  localStorage.setItem('gasUrl',    cfg.gasUrl);
+  localStorage.setItem('gptUrl',    cfg.gptUrl);
+  localStorage.setItem('gssUrl',    cfg.gssUrl);
+  const el = document.getElementById('settings-status');
+  el.textContent = '✅ 保存しました';
+  el.className = 'status-msg ok';
+  setTimeout(() => renderHome(), 800);
+}
+function loadSettingsForm() {
+  document.getElementById('s-start').value = cfg.startDate;
+  document.getElementById('s-gas').value   = cfg.gasUrl;
+  document.getElementById('s-gpt').value   = cfg.gptUrl;
+  document.getElementById('s-gss').value   = cfg.gssUrl;
+  document.getElementById('settings-status').textContent = '';
+}
+
+// =============================================
+//  HELPERS
+// =============================================
+function getInfo() {
+  const now   = new Date();
+  const dow   = now.getDay(); // 0=Sun
+  if (!cfg.startDate) return {week:1, dow, elapsed:0, remaining:56};
+  const start = new Date(cfg.startDate);
+  const diff  = Math.floor((now - start) / 86400000);
+  const week  = Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
+  return {week, dow, elapsed: Math.max(0, diff), remaining: Math.max(0, 56 - diff)};
+}
+
+async function gas(params) {
+  if (!cfg.gasUrl) return null;
+  try {
+    const url = cfg.gasUrl + '?' + new URLSearchParams(params).toString();
+    const res = await fetch(url);
+    return await res.json();
+  } catch(e) { return null; }
+}
+
+function openUrl(url) {
+  if (!url || url === '#') { alert('設定でURLを入力してください'); return; }
+  window.open(url, '_blank');
+}
+
+// =============================================
+//  SCREEN NAVIGATION
+// =============================================
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('on'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.getElementById('nav-'    + name).classList.add('on');
+  if (name === 'home')     renderHome();
+  if (name === 'attack')   initAttack();
+  if (name === 'settings') loadSettingsForm();
+}
+
+// =============================================
+//  HOME
+// =============================================
+let progress = [];
+
+async function renderHome() {
+  const info     = getInfo();
+  const weekData = WEEKS[info.week - 1];
+  const task     = TASKS[info.dow] || null;
+
+  document.getElementById('home-title').textContent = `Week ${info.week} · ${DAY[info.dow]}曜日`;
+
+  if (cfg.gasUrl) {
+    const r = await gas({action:'getProgress'});
+    if (r && r.progress) progress = r.progress;
+  }
+
+  const todayStr  = new Date().toISOString().slice(0,10);
+  const todayDone = progress.some(p => p.date === todayStr && p.done);
+  const weekDone  = progress.filter(p => p.week === String(info.week) && p.done).length;
+
+  let html = '';
+
+  // Theme card
+  html += `<div class="card">
+    <div class="card-label">今週のテーマ</div>
+    <div class="card-big">Week ${info.week}</div>
+    <div class="card-sub">${weekData.theme}</div>
+    <div class="pbar"><div class="pbar-fill" style="width:${Math.round(weekDone/5*100)}%"></div></div>
+    <div class="pbar-label">今週 ${weekDone}/5日 完了</div>
+  </div>`;
+
+  // Days remaining
+  html += `<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
+    <div><div class="card-label">残り</div>
+      <div class="card-big">${info.remaining}<span style="font-size:15px;font-weight:400;color:#5f5e5a"> 日</span></div>
+    </div>
+    <div style="text-align:right"><div class="card-label">経過</div>
+      <div style="font-size:22px;font-weight:700;">${info.elapsed}<span style="font-size:13px;color:#5f5e5a"> 日</span></div>
+    </div>
+  </div>`;
+
+  // Today's task
+  if (task) {
+    const linkBtns = task.links.map(l => {
+      if (l === 'gpt')    return `<button class="btn btn-outline" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
+      if (l === 'gss')    return `<button class="btn btn-outline" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button>`;
+      if (l === 'attack') return `<button class="btn btn-outline" onclick="showScreen('attack')">タイムアタック →</button>`;
+      if (l === 'speech') return `<button class="btn btn-outline" onclick="showScreen('speech')">スピーチ →</button>`;
+      return '';
+    }).join('');
+
+    html += `<div class="card">
+      <div class="card-label">今日やること</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">${DAY[info.dow]}：${task.label}</div>
+      <div class="card-sub">${task.desc}</div>
+      <div class="btn-grid" style="margin-top:14px;">${linkBtns}</div>
+      <div style="margin-top:14px;">`;
+    if (todayDone) {
+      html += `<span class="badge-done">✅ 今日の学習 完了！</span>`;
+    } else {
+      html += `<button class="btn btn-green" onclick="markDone(${info.week},${info.dow},'${task.label}')">✅ やった！</button>`;
+    }
+    html += `</div></div>`;
+  } else {
+    html += `<div class="card"><div class="card-sub" style="text-align:center;padding:8px 0;">今日は休息日🎉 お疲れ様でした！</div></div>`;
+  }
+
+  // 8-week dots
+  html += `<div class="card">
+    <div class="card-label">8週間の進捗</div>
+    <div class="dots">`;
+  for (let i = 1; i <= 8; i++) {
+    const wDone = progress.filter(p => p.week === String(i) && p.done).length;
+    const cls = i < info.week || wDone >= 5 ? 'dot-done' : i === info.week ? 'dot-now' : 'dot-future';
+    html += `<div class="dot ${cls}" title="Week ${i}: ${WEEKS[i-1].theme}">${i}</div>`;
+  }
+  html += `</div></div>`;
+
+  if (!cfg.gasUrl) {
+    html += `<div class="card" style="border-color:#e24b4a;">
+      <div style="font-size:14px;color:#e24b4a;font-weight:600;">⚙️ 設定が必要です</div>
+      <div class="card-sub" style="margin-top:6px;">GAS URLと学習開始日を設定してください。</div>
+      <button class="btn btn-outline" style="margin-top:12px;" onclick="showScreen('settings')">設定を開く →</button>
+    </div>`;
+  }
+
+  document.getElementById('home-content').innerHTML = html;
+}
+
+async function markDone(week, dayNum, task) {
+  if (!cfg.gasUrl) { showScreen('settings'); return; }
+  const r = await gas({action:'saveProgress', week, dayNum, task, done:true});
+  if (r && r.success) renderHome();
+  else alert('保存に失敗しました。GAS URLを確認してください。');
+}
+
+// =============================================
+//  TIME ATTACK
+// =============================================
+let phrases     = [];
+let attIdx      = 0;
+let attCorrect  = 0;
+let attTimer    = null;
+let attSecs     = 10;
+let attRevealed = false;
+
+async function initAttack() {
+  const el   = document.getElementById('attack-content');
+  const info = getInfo();
+  attCorrect = 0;
+  attIdx     = 0;
+
+  clearInterval(attTimer);
+
+  if (!cfg.gasUrl) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">⚙️</div>
+      <div class="empty-text">設定からGAS URLを入力してください</div>
+      <button class="btn btn-outline" style="margin-top:16px;" onclick="showScreen('settings')">設定を開く →</button></div>`;
+    return;
+  }
+
+  el.innerHTML = '<div class="status-msg">フレーズを取得中...</div>';
+  const r = await gas({action:'getPhrases', week: info.week});
+
+  if (!r || !r.phrases || r.phrases.length === 0) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
+      <div class="empty-text">今週のフレーズがまだありません。<br>月曜日にGSSにフレーズを追加してください。</div>
+      <button class="btn btn-outline" style="margin-top:16px;" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button></div>`;
+    return;
+  }
+
+  phrases = r.phrases.filter(p => p.Phrase_JP && p.Phrase_EN)
+                     .sort(() => Math.random() - 0.5);
+
+  if (phrases.length === 0) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
+      <div class="empty-text">Phrase_JPとPhrase_ENが入力されているフレーズがありません。</div></div>`;
+    return;
+  }
+  renderAttackQ();
+}
+
+function renderAttackQ() {
+  clearInterval(attTimer);
+
+  if (attIdx >= phrases.length) { renderAttackResult(); return; }
+
+  attSecs     = 10;
+  attRevealed = false;
+  const p     = phrases[attIdx];
+
+  document.getElementById('attack-content').innerHTML = `
+    <div class="score-row">
+      <div class="score-item"><div class="score-val">${attIdx+1}/${phrases.length}</div><div class="score-lbl">問題</div></div>
+      <div class="score-item"><div class="score-val" style="color:#4a7d1a">${attCorrect}</div><div class="score-lbl">正解</div></div>
+    </div>
+    <div class="phrase-card">
+      <div class="phrase-jp">${escHtml(p.Phrase_JP)}</div>
+      <div class="phrase-en" id="att-en">${escHtml(p.Phrase_EN)}</div>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 120 120" width="120" height="120">
+        <circle class="ring-track" cx="60" cy="60" r="52"/>
+        <circle class="ring-fill" id="att-ring" cx="60" cy="60" r="52"
+          stroke-dasharray="${CIRC_SMALL.toFixed(1)}" stroke-dashoffset="0"/>
+      </svg>
+      <div class="ring-num" id="att-num">10</div>
+    </div>
+    <button class="btn btn-green" id="att-btn" onclick="revealAttack()">答えを見る</button>`;
+
+  attTimer = setInterval(() => {
+    attSecs--;
+    const ring = document.getElementById('att-ring');
+    const num  = document.getElementById('att-num');
+    if (!ring) { clearInterval(attTimer); return; }
+    ring.style.strokeDashoffset = (CIRC_SMALL * (1 - attSecs/10)).toFixed(1);
+    num.textContent = attSecs;
+    if (attSecs <= 3) { ring.classList.add('urgent'); num.classList.add('urgent'); }
+    if (attSecs <= 0) { clearInterval(attTimer); revealAttack(); }
+  }, 1000);
+}
+
+function revealAttack() {
+  if (attRevealed) return;
+  clearInterval(attTimer);
+  attRevealed = true;
+
+  document.getElementById('att-en').classList.add('show');
+
+  const btn = document.getElementById('att-btn');
+  if (btn) btn.style.display = 'none';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'btn-grid';
+  wrap.style.marginTop = '0';
+  wrap.innerHTML = `
+    <button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
+    <button class="btn btn-gray"  onclick="scoreAtt(false)">❌ 言えなかった</button>`;
+  document.getElementById('attack-content').appendChild(wrap);
+}
+
+function scoreAtt(ok) {
+  if (ok) attCorrect++;
+  attIdx++;
+  renderAttackQ();
+}
+
+function renderAttackResult() {
+  const total = phrases.length;
+  const pct   = Math.round(attCorrect / total * 100);
+  const emoji = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
+  const msg   = pct >= 80 ? '素晴らしい！しっかり定着してます 🌟'
+              : pct >= 50 ? 'いい調子！続けましょう 💪'
+              : 'まだ練習が必要です。もう一回挑戦！ 📖';
+  document.getElementById('attack-content').innerHTML = `
+    <div class="result-card">
+      <div style="font-size:48px;margin-bottom:12px;">${emoji}</div>
+      <div class="card-label">スコア</div>
+      <div class="result-score" style="color:${pct>=80?'#4a7d1a':'#2c2c2a'}">${pct}<span style="font-size:24px;font-weight:500">%</span></div>
+      <div class="result-label">${attCorrect} / ${total} 正解</div>
+      <div class="result-msg">${msg}</div>
+    </div>
+    <button class="btn btn-green" onclick="initAttack()">もう一回</button>
+    <button class="btn btn-gray" onclick="showScreen('home')">ホームへ</button>`;
+}
+
+// =============================================
+//  SPEECH TIMER
+// =============================================
+let spTimer    = null;
+let spSecs     = 60;
+let spRunning  = false;
+let spRec      = null;
+let spText     = '';
+
+function toggleSpeech() {
+  spRunning ? stopSpeech() : startSpeech();
+}
+
+function startSpeech() {
+  spRunning = true;
+  spText    = '';
+  document.getElementById('speech-btn').textContent = '録音停止';
+  document.getElementById('transcript').innerHTML = '<span class="rec-dot"></span>聞いています...';
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    spRec = new SR();
+    spRec.lang = 'en-US';
+    spRec.continuous = true;
+    spRec.interimResults = true;
+    spRec.onresult = e => {
+      let interim = '', final = spText;
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
+        else interim += e.results[i][0].transcript;
+      }
+      spText = final;
+      document.getElementById('transcript').textContent = (final + interim) || '聞いています...';
+    };
+    spRec.onerror = () => {};
+    spRec.start();
+  }
+
+  spTimer = setInterval(() => {
+    spSecs--;
+    const m = Math.floor(spSecs / 60);
+    const s = spSecs % 60;
+    const ring = document.getElementById('speech-ring');
+    const num  = document.getElementById('speech-num');
+    if (!ring) { clearInterval(spTimer); return; }
+    num.textContent = `${m}:${String(s).padStart(2,'0')}`;
+    ring.style.strokeDashoffset = (CIRC_BIG * (1 - spSecs/60)).toFixed(1);
+    if (spSecs <= 10) { ring.classList.add('urgent'); num.classList.add('urgent'); }
+    if (spSecs <= 0) {
+      stopSpeech();
+      const btn = document.getElementById('speech-btn');
+      btn.textContent = '⏰ 終了！';
+      btn.disabled = true;
+    }
+  }, 1000);
+}
+
+function stopSpeech() {
+  spRunning = false;
+  clearInterval(spTimer);
+  if (spRec) { try { spRec.stop(); } catch(e) {} spRec = null; }
+  document.getElementById('speech-btn').textContent = '録音開始';
+  if (spText.trim()) document.getElementById('transcript').textContent = spText.trim();
+}
+
+function resetSpeech() {
+  stopSpeech();
+  spSecs = 60;
+  spText = '';
+  const ring = document.getElementById('speech-ring');
+  const num  = document.getElementById('speech-num');
+  const btn  = document.getElementById('speech-btn');
+  ring.style.strokeDashoffset = '0';
+  ring.classList.remove('urgent');
+  num.textContent = '1:00';
+  num.classList.remove('urgent');
+  btn.textContent = '録音開始';
+  btn.disabled = false;
+  document.getElementById('transcript').textContent = 'ここに文字起こしが表示されます...';
+}
+
+// =============================================
+//  UTILS
+// =============================================
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// =============================================
+//  INIT
+// =============================================
+loadCfg();
+renderHome();
+</script>
+</body>
+</html>
