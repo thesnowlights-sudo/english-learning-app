@@ -394,6 +394,7 @@ async function renderHome() {
 async function markDone(week, dayNum, task) {
   if (!cfg.gasUrl) { showScreen('settings'); return; }
   const r = await gas({action:'saveProgress', week, dayNum, task, done:true});
+  alert('結果: ' + JSON.stringify(r)); // ← デバッグ用
   if (r && r.success) renderHome();
   else alert('保存に失敗しました。GAS URLを確認してください。');
 }
