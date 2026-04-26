@@ -318,7 +318,7 @@ async function renderHome() {
     if (r && r.progress) progress = r.progress;
   }
 
-  const todayStr  = new Date().toISOString().slice(0,10);
+  const todayStr = new Date().toLocaleDateString('sv', {timeZone: 'Asia/Tokyo'});
   const todayDone = progress.some(p => p.date === todayStr && p.done);
   const weekDone  = progress.filter(p => p.week === String(info.week) && p.done).length;
 
