@@ -278,7 +278,7 @@ async function gas(params) {
   if (!cfg.gasUrl) return null;
   try {
     const url = cfg.gasUrl + '?' + new URLSearchParams(params).toString();
-    const res = await fetch(url);
+    const res = await fetch(url, { redirect: 'follow' });
     return await res.json();
   } catch(e) { return null; }
 }
