@@ -72,6 +72,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .result-score{font-size:56px;font-weight:800;line-height:1;}
 .result-label{font-size:14px;color:#5f5e5a;margin-top:8px;}
 .result-msg{font-size:15px;margin-top:16px;line-height:1.6;color:#2c2c2a;}
+
+/* ---- 過去の日リスト ---- */
+.past-row{display:flex;align-items:center;padding:10px 0;border-bottom:0.5px solid #f0ede5;}
+.past-row:last-child{border-bottom:none;}
+.past-day-badge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-right:12px;}
+.past-day-done{background:#c5df98;color:#3a6c10;}
+.past-day-miss{background:#ede9e0;color:#888780;}
+.past-info{flex:1;}
+.past-info-day{font-size:13px;font-weight:600;color:#2c2c2a;}
+.past-info-task{font-size:12px;color:#888780;margin-top:2px;}
+.past-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#4a7d1a;color:#fff;white-space:nowrap;}
+.past-btn:active{opacity:.8;}
+
+/* ---- QR モーダル ---- */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
 .modal{background:#fff;border-radius:24px;padding:28px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);}
@@ -188,6 +202,7 @@ const WEEKS = [
   {w:8, theme:'ロールプレイ（実戦）'},
 ];
 const DAY = ['日','月','火','水','木','金','土'];
+// 学習タスクは月〜金（dow 1〜5）
 const TASKS = {
   1:{label:'インプット＋収集', desc:'GPTと日本語で会話してフレーズを収集し、GSSに記録する', links:['gpt','gss']},
   2:{label:'軽く使う', desc:'GSSのフレーズを読んで1〜2文作る。声に出す', links:['gss','attack']},
@@ -240,27 +255,24 @@ function loadSettingsForm() {
   document.getElementById('settings-status').textContent = '';
 }
 
-// QRコード生成
+// QRコード
 function showQR() {
   if (!cfg.gasUrl) { alert('先に設定を保存してください'); return; }
-  const params = new URLSearchParams({
-    gas:   cfg.gasUrl,
-    start: cfg.startDate,
-    gpt:   cfg.gptUrl,
-    gss:   cfg.gssUrl,
-  });
+  const params = new URLSearchParams({gas:cfg.gasUrl, start:cfg.startDate, gpt:cfg.gptUrl, gss:cfg.gssUrl});
   const url = location.origin + location.pathname + '?' + params.toString();
   const box = document.getElementById('qr-box');
   box.innerHTML = '';
-  new QRCode(box, { text: url, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+  new QRCode(box, {text:url, width:220, height:220, correctLevel:QRCode.CorrectLevel.M});
   document.getElementById('qr-modal').classList.add('show');
 }
 function closeQR(e) {
-  if (e.target === document.getElementById('qr-modal')) {
+  if (e.target === document.getElementById('qr-modal'))
     document.getElementById('qr-modal').classList.remove('show');
-  }
 }
 
+// =============================================
+//  HELPERS
+// =============================================
 function getInfo() {
   const now = new Date();
   const dow = now.getDay();
@@ -268,14 +280,42 @@ function getInfo() {
   const start = new Date(cfg.startDate);
   const diff  = Math.floor((now - start) / 86400000);
   const week  = Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
-  return {week, dow, elapsed: Math.max(0, diff), remaining: Math.max(0, 56 - diff)};
+  return {week, dow, elapsed:Math.max(0,diff), remaining:Math.max(0,56-diff)};
+}
+
+// 日付文字列（JST）を返す
+function jstDate(d) {
+  return d.toLocaleDateString('sv', {timeZone:'Asia/Tokyo'});
+}
+
+// 今週の月〜「今日」までの学習日リストを返す
+function getPastDays() {
+  const today = new Date();
+  const todayDow = today.getDay(); // 0=日
+  const days = [];
+
+  // 今週の月曜日を基準にする
+  // 月(1)〜今日のdowまで
+  for (let dow = 1; dow <= Math.min(todayDow, 5); dow++) {
+    const diff = todayDow - dow;
+    const d = new Date(today);
+    d.setDate(today.getDate() - diff);
+    days.push({
+      dow,
+      dateStr: jstDate(d),
+      label: DAY[dow] + '曜日',
+      task: TASKS[dow],
+      isToday: diff === 0,
+    });
+  }
+  return days;
 }
 
 async function gas(params) {
   if (!cfg.gasUrl) return null;
   try {
     const url = cfg.gasUrl + '?' + new URLSearchParams(params).toString();
-    const res = await fetch(url, { redirect: 'follow' });
+    const res = await fetch(url, {redirect:'follow'});
     return await res.json();
   } catch(e) { return null; }
 }
@@ -295,21 +335,30 @@ function showScreen(name) {
   if (name === 'settings') loadSettingsForm();
 }
 
+// =============================================
+//  HOME
+// =============================================
 let progress = [];
 
 async function renderHome() {
   const info     = getInfo();
   const weekData = WEEKS[info.week - 1];
   const task     = TASKS[info.dow] || null;
+
   document.getElementById('home-title').textContent = `Week ${info.week} · ${DAY[info.dow]}曜日`;
+
   if (cfg.gasUrl) {
     const r = await gas({action:'getProgress'});
     if (r && r.progress) progress = r.progress;
   }
-  const todayStr  = new Date().toLocaleDateString('sv', {timeZone: 'Asia/Tokyo'});
+
+  const todayStr  = jstDate(new Date());
   const todayDone = progress.some(p => p.date === todayStr && p.done);
   const weekDone  = progress.filter(p => p.week === String(info.week) && p.done).length;
+
   let html = '';
+
+  // テーマカード
   html += `<div class="card">
     <div class="card-label">今週のテーマ</div>
     <div class="card-big">Week ${info.week}</div>
@@ -317,6 +366,8 @@ async function renderHome() {
     <div class="pbar"><div class="pbar-fill" style="width:${Math.round(weekDone/5*100)}%"></div></div>
     <div class="pbar-label">今週 ${weekDone}/5日 完了</div>
   </div>`;
+
+  // 残り/経過
   html += `<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
     <div><div class="card-label">残り</div>
       <div class="card-big">${info.remaining}<span style="font-size:15px;font-weight:400;color:#5f5e5a"> 日</span></div>
@@ -325,6 +376,8 @@ async function renderHome() {
       <div style="font-size:22px;font-weight:700;">${info.elapsed}<span style="font-size:13px;color:#5f5e5a"> 日</span></div>
     </div>
   </div>`;
+
+  // 今日のタスク
   if (task) {
     const linkBtns = task.links.map(l => {
       if (l === 'gpt')    return `<button class="btn btn-outline" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
@@ -342,12 +395,36 @@ async function renderHome() {
     if (todayDone) {
       html += `<span class="badge-done">✅ 今日の学習 完了！</span>`;
     } else {
-      html += `<button class="btn btn-green" onclick="markDone(${info.week},${info.dow},'${task.label}')">✅ やった！</button>`;
+      html += `<button class="btn btn-green" onclick="markDone(${info.week},${info.dow},'${task.label}',null)">✅ やった！</button>`;
     }
     html += `</div></div>`;
   } else {
     html += `<div class="card"><div class="card-sub" style="text-align:center;padding:8px 0;">今日は休息日🎉 お疲れ様でした！</div></div>`;
   }
+
+  // ── 今週の振り返り（月〜今日） ──
+  const pastDays = getPastDays();
+  // 今日以外の過去の日だけ表示（未完了があれば）
+  const pastOnly = pastDays.filter(d => !d.isToday && d.task);
+  if (pastOnly.length > 0) {
+    html += `<div class="card">
+      <div class="card-label">今週の振り返り</div>
+      <div style="font-size:12px;color:#888780;margin-bottom:10px;">できなかった日を遡って記録できます</div>`;
+    pastOnly.forEach(d => {
+      const done = progress.some(p => p.date === d.dateStr && p.done);
+      html += `<div class="past-row">
+        <div class="past-day-badge ${done ? 'past-day-done' : 'past-day-miss'}">${DAY[d.dow]}</div>
+        <div class="past-info">
+          <div class="past-info-day">${d.label}${done ? ' ✅' : ''}</div>
+          <div class="past-info-task">${d.task.label}</div>
+        </div>
+        ${!done ? `<button class="past-btn" onclick="markDone(${info.week},${d.dow},'${d.task.label}','${d.dateStr}')">やった！</button>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // 8週間の進捗ドット
   html += `<div class="card"><div class="card-label">8週間の進捗</div><div class="dots">`;
   for (let i = 1; i <= 8; i++) {
     const wDone = progress.filter(p => p.week === String(i) && p.done).length;
@@ -355,6 +432,7 @@ async function renderHome() {
     html += `<div class="dot ${cls}">${i}</div>`;
   }
   html += `</div></div>`;
+
   if (!cfg.gasUrl) {
     html += `<div class="card" style="border-color:#e24b4a;">
       <div style="font-size:14px;color:#e24b4a;font-weight:600;">⚙️ 設定が必要です</div>
@@ -362,40 +440,47 @@ async function renderHome() {
       <button class="btn btn-outline" style="margin-top:12px;" onclick="showScreen('settings')">設定を開く →</button>
     </div>`;
   }
+
   document.getElementById('home-content').innerHTML = html;
 }
 
-async function markDone(week, dayNum, task) {
+// dateStr を渡すと過去日付で保存、null なら今日
+async function markDone(week, dayNum, task, dateStr) {
   if (!cfg.gasUrl) { showScreen('settings'); return; }
-  const r = await gas({action:'saveProgress', week, dayNum, task, done:true});
+  const params = {action:'saveProgress', week, dayNum, task, done:true};
+  if (dateStr) params.dateStr = dateStr;
+  const r = await gas(params);
   if (r && r.success) renderHome();
   else alert('保存に失敗しました。GAS URLを確認してください。');
 }
 
+// =============================================
+//  TIME ATTACK
+// =============================================
 let phrases=[], attIdx=0, attCorrect=0, attTimer=null, attSecs=10, attRevealed=false;
 
 async function initAttack() {
   const el = document.getElementById('attack-content');
   const info = getInfo();
-  attCorrect = 0; attIdx = 0;
+  attCorrect=0; attIdx=0;
   clearInterval(attTimer);
   if (!cfg.gasUrl) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">⚙️</div>
+    el.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div>
       <div class="empty-text">設定からGAS URLを入力してください</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="showScreen('settings')">設定を開く →</button></div>`;
     return;
   }
-  el.innerHTML = '<div class="status-msg">フレーズを取得中...</div>';
-  const r = await gas({action:'getPhrases', week: info.week});
-  if (!r || !r.phrases || r.phrases.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
+  el.innerHTML='<div class="status-msg">フレーズを取得中...</div>';
+  const r = await gas({action:'getPhrases', week:info.week});
+  if (!r || !r.phrases || r.phrases.length===0) {
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
       <div class="empty-text">今週のフレーズがまだありません。</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button></div>`;
     return;
   }
-  phrases = r.phrases.filter(p => p.Phrase_JP && p.Phrase_EN).sort(() => Math.random() - 0.5);
-  if (phrases.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
+  phrases=r.phrases.filter(p=>p.Phrase_JP&&p.Phrase_EN).sort(()=>Math.random()-.5);
+  if (phrases.length===0) {
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
       <div class="empty-text">Phrase_JPとPhrase_ENが入力されているフレーズがありません。</div></div>`;
     return;
   }
@@ -404,10 +489,10 @@ async function initAttack() {
 
 function renderAttackQ() {
   clearInterval(attTimer);
-  if (attIdx >= phrases.length) { renderAttackResult(); return; }
-  attSecs = 10; attRevealed = false;
-  const p = phrases[attIdx];
-  document.getElementById('attack-content').innerHTML = `
+  if (attIdx>=phrases.length){renderAttackResult();return;}
+  attSecs=10; attRevealed=false;
+  const p=phrases[attIdx];
+  document.getElementById('attack-content').innerHTML=`
     <div class="score-row">
       <div class="score-item"><div class="score-val">${attIdx+1}/${phrases.length}</div><div class="score-lbl">問題</div></div>
       <div class="score-item"><div class="score-val" style="color:#4a7d1a">${attCorrect}</div><div class="score-lbl">正解</div></div>
@@ -425,39 +510,37 @@ function renderAttackQ() {
       <div class="ring-num" id="att-num">10</div>
     </div>
     <button class="btn btn-green" id="att-btn" onclick="revealAttack()">答えを見る</button>`;
-  attTimer = setInterval(() => {
+  attTimer=setInterval(()=>{
     attSecs--;
-    const ring = document.getElementById('att-ring');
-    const num  = document.getElementById('att-num');
-    if (!ring) { clearInterval(attTimer); return; }
-    ring.style.strokeDashoffset = (CIRC_SMALL * (1 - attSecs/10)).toFixed(1);
-    num.textContent = attSecs;
-    if (attSecs <= 3) { ring.classList.add('urgent'); num.classList.add('urgent'); }
-    if (attSecs <= 0) { clearInterval(attTimer); revealAttack(); }
-  }, 1000);
+    const ring=document.getElementById('att-ring'),num=document.getElementById('att-num');
+    if(!ring){clearInterval(attTimer);return;}
+    ring.style.strokeDashoffset=(CIRC_SMALL*(1-attSecs/10)).toFixed(1);
+    num.textContent=attSecs;
+    if(attSecs<=3){ring.classList.add('urgent');num.classList.add('urgent');}
+    if(attSecs<=0){clearInterval(attTimer);revealAttack();}
+  },1000);
 }
 
 function revealAttack() {
-  if (attRevealed) return;
-  clearInterval(attTimer); attRevealed = true;
+  if(attRevealed)return;
+  clearInterval(attTimer); attRevealed=true;
   document.getElementById('att-en').classList.add('show');
-  const btn = document.getElementById('att-btn');
-  if (btn) btn.style.display = 'none';
-  const wrap = document.createElement('div');
-  wrap.className = 'btn-grid'; wrap.style.marginTop = '0';
-  wrap.innerHTML = `<button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
+  const btn=document.getElementById('att-btn');
+  if(btn)btn.style.display='none';
+  const wrap=document.createElement('div');
+  wrap.className='btn-grid'; wrap.style.marginTop='0';
+  wrap.innerHTML=`<button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
     <button class="btn btn-gray" onclick="scoreAtt(false)">❌ 言えなかった</button>`;
   document.getElementById('attack-content').appendChild(wrap);
 }
 
-function scoreAtt(ok) { if (ok) attCorrect++; attIdx++; renderAttackQ(); }
+function scoreAtt(ok){if(ok)attCorrect++;attIdx++;renderAttackQ();}
 
 function renderAttackResult() {
-  const total = phrases.length;
-  const pct   = Math.round(attCorrect / total * 100);
-  const emoji = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
-  const msg   = pct >= 80 ? '素晴らしい！しっかり定着してます 🌟' : pct >= 50 ? 'いい調子！続けましょう 💪' : 'まだ練習が必要です。もう一回挑戦！ 📖';
-  document.getElementById('attack-content').innerHTML = `
+  const total=phrases.length, pct=Math.round(attCorrect/total*100);
+  const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
+  const msg=pct>=80?'素晴らしい！しっかり定着してます 🌟':pct>=50?'いい調子！続けましょう 💪':'まだ練習が必要です。もう一回挑戦！ 📖';
+  document.getElementById('attack-content').innerHTML=`
     <div class="result-card">
       <div style="font-size:48px;margin-bottom:12px;">${emoji}</div>
       <div class="card-label">スコア</div>
@@ -469,57 +552,59 @@ function renderAttackResult() {
     <button class="btn btn-gray" onclick="showScreen('home')">ホームへ</button>`;
 }
 
-let spTimer=null, spSecs=60, spRunning=false, spRec=null, spText='';
-function toggleSpeech() { spRunning ? stopSpeech() : startSpeech(); }
+// =============================================
+//  SPEECH TIMER
+// =============================================
+let spTimer=null,spSecs=60,spRunning=false,spRec=null,spText='';
+function toggleSpeech(){spRunning?stopSpeech():startSpeech();}
 
 function startSpeech() {
-  spRunning = true; spText = '';
-  document.getElementById('speech-btn').textContent = '録音停止';
-  document.getElementById('transcript').innerHTML = '<span class="rec-dot"></span>聞いています...';
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    spRec = new SR(); spRec.lang = 'en-US'; spRec.continuous = true; spRec.interimResults = true;
-    spRec.onresult = e => {
-      let interim = '', final = spText;
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
-        else interim += e.results[i][0].transcript;
+  spRunning=true; spText='';
+  document.getElementById('speech-btn').textContent='録音停止';
+  document.getElementById('transcript').innerHTML='<span class="rec-dot"></span>聞いています...';
+  if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    spRec=new SR(); spRec.lang='en-US'; spRec.continuous=true; spRec.interimResults=true;
+    spRec.onresult=e=>{
+      let interim='',final=spText;
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';
+        else interim+=e.results[i][0].transcript;
       }
-      spText = final;
-      document.getElementById('transcript').textContent = (final + interim) || '聞いています...';
+      spText=final;
+      document.getElementById('transcript').textContent=(final+interim)||'聞いています...';
     };
-    spRec.onerror = () => {}; spRec.start();
+    spRec.onerror=()=>{}; spRec.start();
   }
-  spTimer = setInterval(() => {
+  spTimer=setInterval(()=>{
     spSecs--;
-    const m = Math.floor(spSecs/60), s = spSecs%60;
-    const ring = document.getElementById('speech-ring');
-    const num  = document.getElementById('speech-num');
-    if (!ring) { clearInterval(spTimer); return; }
-    num.textContent = `${m}:${String(s).padStart(2,'0')}`;
-    ring.style.strokeDashoffset = (CIRC_BIG * (1 - spSecs/60)).toFixed(1);
-    if (spSecs <= 10) { ring.classList.add('urgent'); num.classList.add('urgent'); }
-    if (spSecs <= 0) { stopSpeech(); const btn=document.getElementById('speech-btn'); btn.textContent='⏰ 終了！'; btn.disabled=true; }
-  }, 1000);
+    const m=Math.floor(spSecs/60),s=spSecs%60;
+    const ring=document.getElementById('speech-ring'),num=document.getElementById('speech-num');
+    if(!ring){clearInterval(spTimer);return;}
+    num.textContent=`${m}:${String(s).padStart(2,'0')}`;
+    ring.style.strokeDashoffset=(CIRC_BIG*(1-spSecs/60)).toFixed(1);
+    if(spSecs<=10){ring.classList.add('urgent');num.classList.add('urgent');}
+    if(spSecs<=0){stopSpeech();const btn=document.getElementById('speech-btn');btn.textContent='⏰ 終了！';btn.disabled=true;}
+  },1000);
 }
 
 function stopSpeech() {
-  spRunning = false; clearInterval(spTimer);
-  if (spRec) { try { spRec.stop(); } catch(e) {} spRec = null; }
-  document.getElementById('speech-btn').textContent = '録音開始';
-  if (spText.trim()) document.getElementById('transcript').textContent = spText.trim();
+  spRunning=false; clearInterval(spTimer);
+  if(spRec){try{spRec.stop();}catch(e){}spRec=null;}
+  document.getElementById('speech-btn').textContent='録音開始';
+  if(spText.trim())document.getElementById('transcript').textContent=spText.trim();
 }
 
 function resetSpeech() {
   stopSpeech(); spSecs=60; spText='';
-  const ring=document.getElementById('speech-ring'), num=document.getElementById('speech-num'), btn=document.getElementById('speech-btn');
+  const ring=document.getElementById('speech-ring'),num=document.getElementById('speech-num'),btn=document.getElementById('speech-btn');
   ring.style.strokeDashoffset='0'; ring.classList.remove('urgent');
   num.textContent='1:00'; num.classList.remove('urgent');
   btn.textContent='録音開始'; btn.disabled=false;
   document.getElementById('transcript').textContent='ここに文字起こしが表示されます...';
 }
 
-function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 applyUrlParams();
 loadCfg();
