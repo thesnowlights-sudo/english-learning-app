@@ -10,7 +10,7 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP',sans-serif;background:#f5f3ee;color:#2c2c2a;min-height:100vh;}
 .screen{display:none;min-height:100vh;padding-bottom:80px;}
 .screen.active{display:block;}
-.topbar{background:#fff;padding:16px 20px 12px;border-bottom:0.5px solid #e0ddd5;position:sticky;top:0;z-index:10;}
+.topbar{background:#fff;padding:12px 16px 10px;border-bottom:0.5px solid #e0ddd5;position:sticky;top:0;z-index:10;}
 .topbar-sub{font-size:11px;color:#888780;letter-spacing:.04em;margin-bottom:2px;}
 .topbar-title{font-size:18px;font-weight:600;color:#2c2c2a;}
 .content{padding:16px 16px 0;}
@@ -32,15 +32,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .btn-green{background:#4a7d1a;color:#fff;}
 .btn-gray{background:#ede9e0;color:#2c2c2a;}
 .btn-outline{background:#fff;color:#4a7d1a;border:1.5px solid #4a7d1a;padding:12px;}
-.btn-outline-gray{background:#fff;color:#5f5e5a;border:1.5px solid #c5c3bb;padding:12px;}
 .btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
 .badge-done{display:inline-block;background:#c5df98;color:#3a6c10;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;}
+
+/* ---- 日付ナビゲーター ---- */
+.day-nav{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:16px;padding:12px 16px;margin-bottom:12px;border:0.5px solid #e5e2da;}
+.day-nav-btn{width:40px;height:40px;border-radius:50%;border:none;background:#f5f3ee;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.day-nav-btn:active{background:#ede9e0;}
+.day-nav-btn:disabled{opacity:.3;cursor:default;}
+.day-nav-center{text-align:center;flex:1;}
+.day-nav-date{font-size:13px;color:#888780;margin-bottom:2px;}
+.day-nav-label{font-size:16px;font-weight:700;color:#2c2c2a;}
+.day-nav-today{font-size:11px;color:#4a7d1a;font-weight:600;margin-top:2px;}
+
+/* ---- bnav ---- */
 .bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #e5e2da;display:flex;padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:100;}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;}
 .bnav-icon{font-size:22px;color:#aaa9a0;}
 .bnav-label{font-size:10px;color:#aaa9a0;}
 .bnav-item.on .bnav-icon,.bnav-item.on .bnav-label{color:#4a7d1a;}
 .bnav-item.on .bnav-label{font-weight:700;}
+
+/* ---- タイムアタック ---- */
 .phrase-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;margin-bottom:20px;border:0.5px solid #e5e2da;min-height:170px;display:flex;flex-direction:column;justify-content:center;}
 .phrase-jp{font-size:22px;font-weight:700;color:#2c2c2a;line-height:1.4;}
 .phrase-en{font-size:17px;font-weight:600;color:#4a7d1a;margin-top:16px;display:none;line-height:1.4;}
@@ -56,9 +69,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .score-item{text-align:center;}
 .score-val{font-size:30px;font-weight:700;color:#2c2c2a;}
 .score-lbl{font-size:11px;color:#888780;margin-top:2px;}
+
+/* ---- スピーチ ---- */
 .transcript{background:#ede9e0;border-radius:12px;padding:16px;min-height:100px;font-size:15px;color:#5f5e5a;line-height:1.7;margin-top:16px;white-space:pre-wrap;}
 .rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#e24b4a;margin-right:6px;animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+/* ---- 設定 ---- */
 .set-label{font-size:13px;font-weight:600;color:#5f5e5a;margin-bottom:6px;}
 .set-input{width:100%;padding:12px;border:0.5px solid #e0ddd5;border-radius:10px;font-size:14px;background:#fff;color:#2c2c2a;margin-bottom:16px;}
 .set-input:focus{outline:none;border-color:#4a7d1a;}
@@ -73,19 +90,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .result-label{font-size:14px;color:#5f5e5a;margin-top:8px;}
 .result-msg{font-size:15px;margin-top:16px;line-height:1.6;color:#2c2c2a;}
 
-/* ---- 過去の日リスト ---- */
-.past-row{display:flex;align-items:center;padding:10px 0;border-bottom:0.5px solid #f0ede5;}
-.past-row:last-child{border-bottom:none;}
-.past-day-badge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-right:12px;}
-.past-day-done{background:#c5df98;color:#3a6c10;}
-.past-day-miss{background:#ede9e0;color:#888780;}
-.past-info{flex:1;}
-.past-info-day{font-size:13px;font-weight:600;color:#2c2c2a;}
-.past-info-task{font-size:12px;color:#888780;margin-top:2px;}
-.past-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;background:#4a7d1a;color:#fff;white-space:nowrap;}
-.past-btn:active{opacity:.8;}
-
-/* ---- QR モーダル ---- */
+/* ---- QRモーダル ---- */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
 .modal{background:#fff;border-radius:24px;padding:28px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);}
@@ -97,6 +102,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 </head>
 <body>
 
+<!-- ============ HOME ============ -->
 <div class="screen active" id="screen-home">
   <div class="topbar">
     <div class="topbar-sub">English Learning</div>
@@ -107,16 +113,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   </div>
 </div>
 
+<!-- ============ TIME ATTACK ============ -->
 <div class="screen" id="screen-attack">
   <div class="topbar">
     <div class="topbar-sub">Phrase_JP → Phrase_EN / 10秒</div>
     <div class="topbar-title">タイムアタック</div>
   </div>
-  <div class="content" id="attack-content">
-    <div class="status-msg">読み込み中...</div>
-  </div>
+  <div class="content" id="attack-content"></div>
 </div>
 
+<!-- ============ SPEECH ============ -->
 <div class="screen" id="screen-speech">
   <div class="topbar">
     <div class="topbar-sub">Recording & Transcript</div>
@@ -137,10 +143,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   </div>
 </div>
 
+<!-- ============ SETTINGS ============ -->
 <div class="screen" id="screen-settings">
-  <div class="topbar">
-    <div class="topbar-title">設定</div>
-  </div>
+  <div class="topbar"><div class="topbar-title">設定</div></div>
   <div class="content" style="padding-top:20px;">
     <div class="set-label">学習開始日（Week1の月曜日）</div>
     <input type="date" class="set-input" id="s-start">
@@ -165,7 +170,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   </div>
 </div>
 
-<!-- QR モーダル -->
+<!-- QRモーダル -->
 <div class="modal-overlay" id="qr-modal" onclick="closeQR(event)">
   <div class="modal">
     <div class="modal-title">📱 スマホで読み取って！</div>
@@ -202,7 +207,6 @@ const WEEKS = [
   {w:8, theme:'ロールプレイ（実戦）'},
 ];
 const DAY = ['日','月','火','水','木','金','土'];
-// 学習タスクは月〜金（dow 1〜5）
 const TASKS = {
   1:{label:'インプット＋収集', desc:'GPTと日本語で会話してフレーズを収集し、GSSに記録する', links:['gpt','gss']},
   2:{label:'軽く使う', desc:'GSSのフレーズを読んで1〜2文作る。声に出す', links:['gss','attack']},
@@ -213,7 +217,10 @@ const TASKS = {
 const CIRC_SMALL = 2 * Math.PI * 52;
 const CIRC_BIG   = 2 * Math.PI * 56;
 
-// URLパラメータから設定を自動ロード
+// 表示中の日付オフセット（0=今日、-1=昨日、-2=一昨日…）
+let dayOffset = 0;
+
+// URLパラメータ → localStorage
 function applyUrlParams() {
   const p = new URLSearchParams(location.search);
   if (!p.get('gas')) return;
@@ -255,7 +262,6 @@ function loadSettingsForm() {
   document.getElementById('settings-status').textContent = '';
 }
 
-// QRコード
 function showQR() {
   if (!cfg.gasUrl) { alert('先に設定を保存してください'); return; }
   const params = new URLSearchParams({gas:cfg.gasUrl, start:cfg.startDate, gpt:cfg.gptUrl, gss:cfg.gssUrl});
@@ -271,8 +277,28 @@ function closeQR(e) {
 }
 
 // =============================================
-//  HELPERS
+//  日付ユーティリティ
 // =============================================
+function jstDate(d) {
+  return d.toLocaleDateString('sv', {timeZone:'Asia/Tokyo'});
+}
+
+// offsetDays ずらした日付オブジェクトを返す
+function getOffsetDate(offset) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  return d;
+}
+
+// その日のWeek番号を計算
+function getWeekForDate(d) {
+  if (!cfg.startDate) return 1;
+  const start = new Date(cfg.startDate);
+  const diff = Math.floor((d - start) / 86400000);
+  return Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
+}
+
+// 全体情報（今日基準）
 function getInfo() {
   const now = new Date();
   const dow = now.getDay();
@@ -281,34 +307,6 @@ function getInfo() {
   const diff  = Math.floor((now - start) / 86400000);
   const week  = Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
   return {week, dow, elapsed:Math.max(0,diff), remaining:Math.max(0,56-diff)};
-}
-
-// 日付文字列（JST）を返す
-function jstDate(d) {
-  return d.toLocaleDateString('sv', {timeZone:'Asia/Tokyo'});
-}
-
-// 今週の月〜「今日」までの学習日リストを返す
-function getPastDays() {
-  const today = new Date();
-  const todayDow = today.getDay(); // 0=日
-  const days = [];
-
-  // 今週の月曜日を基準にする
-  // 月(1)〜今日のdowまで
-  for (let dow = 1; dow <= Math.min(todayDow, 5); dow++) {
-    const diff = todayDow - dow;
-    const d = new Date(today);
-    d.setDate(today.getDate() - diff);
-    days.push({
-      dow,
-      dateStr: jstDate(d),
-      label: DAY[dow] + '曜日',
-      task: TASKS[dow],
-      isToday: diff === 0,
-    });
-  }
-  return days;
 }
 
 async function gas(params) {
@@ -330,9 +328,24 @@ function showScreen(name) {
   document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('on'));
   document.getElementById('screen-' + name).classList.add('active');
   document.getElementById('nav-'    + name).classList.add('on');
-  if (name === 'home')     renderHome();
+  if (name === 'home')     { dayOffset = 0; renderHome(); }
   if (name === 'attack')   initAttack();
   if (name === 'settings') loadSettingsForm();
+}
+
+// 日付をずらしてホームを再描画
+function shiftDay(delta) {
+  const next = dayOffset + delta;
+  // 未来はNG
+  if (next > 0) return;
+  // 学習開始日より前はNG
+  if (cfg.startDate) {
+    const targetDate = getOffsetDate(next);
+    const start = new Date(cfg.startDate);
+    if (targetDate < start) return;
+  }
+  dayOffset = next;
+  renderHome();
 }
 
 // =============================================
@@ -341,11 +354,22 @@ function showScreen(name) {
 let progress = [];
 
 async function renderHome() {
-  const info     = getInfo();
-  const weekData = WEEKS[info.week - 1];
-  const task     = TASKS[info.dow] || null;
+  // 表示対象の日付
+  const targetDate = getOffsetDate(dayOffset);
+  const targetDow  = targetDate.getDay();
+  const targetDateStr = jstDate(targetDate);
+  const isToday = dayOffset === 0;
 
-  document.getElementById('home-title').textContent = `Week ${info.week} · ${DAY[info.dow]}曜日`;
+  const info     = getInfo(); // 今日のweek/elapsed/remaining
+  const viewWeek = getWeekForDate(targetDate);
+  const weekData = WEEKS[viewWeek - 1];
+  const task     = TASKS[targetDow] || null;
+
+  // タイトル
+  const titleStr = isToday
+    ? `Week ${info.week} · 今日（${DAY[targetDow]}曜日）`
+    : `Week ${viewWeek} · ${DAY[targetDow]}曜日`;
+  document.getElementById('home-title').textContent = titleStr;
 
   if (cfg.gasUrl) {
     const r = await gas({action:'getProgress'});
@@ -353,31 +377,52 @@ async function renderHome() {
   }
 
   const todayStr  = jstDate(new Date());
-  const todayDone = progress.some(p => p.date === todayStr && p.done);
-  const weekDone  = progress.filter(p => p.week === String(info.week) && p.done).length;
+  const dayDone   = progress.some(p => p.date === targetDateStr && p.done);
+  const weekDone  = progress.filter(p => p.week === String(viewWeek) && p.done).length;
 
   let html = '';
 
-  // テーマカード
+  // ── 日付ナビゲーター ──
+  const canPrev = cfg.startDate
+    ? getOffsetDate(dayOffset - 1) >= new Date(cfg.startDate)
+    : dayOffset > -56;
+  const canNext = dayOffset < 0;
+
+  // 日付表示
+  const dateLabel = targetDate.toLocaleDateString('ja-JP', {month:'long', day:'numeric', timeZone:'Asia/Tokyo'});
+
+  html += `<div class="day-nav">
+    <button class="day-nav-btn" onclick="shiftDay(-1)" ${canPrev ? '' : 'disabled'}>◀</button>
+    <div class="day-nav-center">
+      <div class="day-nav-date">${dateLabel}</div>
+      <div class="day-nav-label">${DAY[targetDow]}曜日</div>
+      ${isToday ? '<div class="day-nav-today">TODAY</div>' : ''}
+    </div>
+    <button class="day-nav-btn" onclick="shiftDay(+1)" ${canNext ? '' : 'disabled'}>▶</button>
+  </div>`;
+
+  // テーマ＆進捗カード
   html += `<div class="card">
-    <div class="card-label">今週のテーマ</div>
-    <div class="card-big">Week ${info.week}</div>
+    <div class="card-label">Week ${viewWeek} のテーマ</div>
+    <div class="card-big">Week ${viewWeek}</div>
     <div class="card-sub">${weekData.theme}</div>
     <div class="pbar"><div class="pbar-fill" style="width:${Math.round(weekDone/5*100)}%"></div></div>
     <div class="pbar-label">今週 ${weekDone}/5日 完了</div>
   </div>`;
 
-  // 残り/経過
-  html += `<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
-    <div><div class="card-label">残り</div>
-      <div class="card-big">${info.remaining}<span style="font-size:15px;font-weight:400;color:#5f5e5a"> 日</span></div>
-    </div>
-    <div style="text-align:right"><div class="card-label">経過</div>
-      <div style="font-size:22px;font-weight:700;">${info.elapsed}<span style="font-size:13px;color:#5f5e5a"> 日</span></div>
-    </div>
-  </div>`;
+  // 残り/経過（今日表示のときだけ）
+  if (isToday) {
+    html += `<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
+      <div><div class="card-label">残り</div>
+        <div class="card-big">${info.remaining}<span style="font-size:15px;font-weight:400;color:#5f5e5a"> 日</span></div>
+      </div>
+      <div style="text-align:right"><div class="card-label">経過</div>
+        <div style="font-size:22px;font-weight:700;">${info.elapsed}<span style="font-size:13px;color:#5f5e5a"> 日</span></div>
+      </div>
+    </div>`;
+  }
 
-  // 今日のタスク
+  // タスクカード
   if (task) {
     const linkBtns = task.links.map(l => {
       if (l === 'gpt')    return `<button class="btn btn-outline" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
@@ -386,45 +431,29 @@ async function renderHome() {
       if (l === 'speech') return `<button class="btn btn-outline" onclick="showScreen('speech')">スピーチ →</button>`;
       return '';
     }).join('');
+
     html += `<div class="card">
-      <div class="card-label">今日やること</div>
-      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">${DAY[info.dow]}：${task.label}</div>
+      <div class="card-label">${isToday ? '今日やること' : 'この日のタスク'}</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">${DAY[targetDow]}：${task.label}</div>
       <div class="card-sub">${task.desc}</div>
       <div class="btn-grid" style="margin-top:14px;">${linkBtns}</div>
       <div style="margin-top:14px;">`;
-    if (todayDone) {
-      html += `<span class="badge-done">✅ 今日の学習 完了！</span>`;
+
+    if (dayDone) {
+      html += `<span class="badge-done">✅ ${isToday ? '今日' : 'この日'}の学習 完了！</span>`;
     } else {
-      html += `<button class="btn btn-green" onclick="markDone(${info.week},${info.dow},'${task.label}',null)">✅ やった！</button>`;
+      // 未来はボタンなし、過去・今日はボタンあり
+      const dateParam = isToday ? 'null' : `'${targetDateStr}'`;
+      html += `<button class="btn btn-green" onclick="markDone(${viewWeek},${targetDow},'${task.label}',${dateParam})">✅ やった！</button>`;
     }
     html += `</div></div>`;
   } else {
-    html += `<div class="card"><div class="card-sub" style="text-align:center;padding:8px 0;">今日は休息日🎉 お疲れ様でした！</div></div>`;
+    html += `<div class="card"><div class="card-sub" style="text-align:center;padding:8px 0;">
+      ${targetDow === 0 || targetDow === 6 ? '休息日🎉 お疲れ様でした！' : 'この日はタスクがありません'}
+    </div></div>`;
   }
 
-  // ── 今週の振り返り（月〜今日） ──
-  const pastDays = getPastDays();
-  // 今日以外の過去の日だけ表示（未完了があれば）
-  const pastOnly = pastDays.filter(d => !d.isToday && d.task);
-  if (pastOnly.length > 0) {
-    html += `<div class="card">
-      <div class="card-label">今週の振り返り</div>
-      <div style="font-size:12px;color:#888780;margin-bottom:10px;">できなかった日を遡って記録できます</div>`;
-    pastOnly.forEach(d => {
-      const done = progress.some(p => p.date === d.dateStr && p.done);
-      html += `<div class="past-row">
-        <div class="past-day-badge ${done ? 'past-day-done' : 'past-day-miss'}">${DAY[d.dow]}</div>
-        <div class="past-info">
-          <div class="past-info-day">${d.label}${done ? ' ✅' : ''}</div>
-          <div class="past-info-task">${d.task.label}</div>
-        </div>
-        ${!done ? `<button class="past-btn" onclick="markDone(${info.week},${d.dow},'${d.task.label}','${d.dateStr}')">やった！</button>` : ''}
-      </div>`;
-    });
-    html += `</div>`;
-  }
-
-  // 8週間の進捗ドット
+  // 8週間ドット
   html += `<div class="card"><div class="card-label">8週間の進捗</div><div class="dots">`;
   for (let i = 1; i <= 8; i++) {
     const wDone = progress.filter(p => p.week === String(i) && p.done).length;
@@ -444,7 +473,6 @@ async function renderHome() {
   document.getElementById('home-content').innerHTML = html;
 }
 
-// dateStr を渡すと過去日付で保存、null なら今日
 async function markDone(week, dayNum, task, dateStr) {
   if (!cfg.gasUrl) { showScreen('settings'); return; }
   const params = {action:'saveProgress', week, dayNum, task, done:true};
@@ -537,7 +565,7 @@ function revealAttack() {
 function scoreAtt(ok){if(ok)attCorrect++;attIdx++;renderAttackQ();}
 
 function renderAttackResult() {
-  const total=phrases.length, pct=Math.round(attCorrect/total*100);
+  const total=phrases.length,pct=Math.round(attCorrect/total*100);
   const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
   const msg=pct>=80?'素晴らしい！しっかり定着してます 🌟':pct>=50?'いい調子！続けましょう 💪':'まだ練習が必要です。もう一回挑戦！ 📖';
   document.getElementById('attack-content').innerHTML=`
@@ -553,11 +581,10 @@ function renderAttackResult() {
 }
 
 // =============================================
-//  SPEECH TIMER
+//  SPEECH
 // =============================================
 let spTimer=null,spSecs=60,spRunning=false,spRec=null,spText='';
 function toggleSpeech(){spRunning?stopSpeech():startSpeech();}
-
 function startSpeech() {
   spRunning=true; spText='';
   document.getElementById('speech-btn').textContent='録音停止';
@@ -587,15 +614,13 @@ function startSpeech() {
     if(spSecs<=0){stopSpeech();const btn=document.getElementById('speech-btn');btn.textContent='⏰ 終了！';btn.disabled=true;}
   },1000);
 }
-
-function stopSpeech() {
+function stopSpeech(){
   spRunning=false; clearInterval(spTimer);
   if(spRec){try{spRec.stop();}catch(e){}spRec=null;}
   document.getElementById('speech-btn').textContent='録音開始';
   if(spText.trim())document.getElementById('transcript').textContent=spText.trim();
 }
-
-function resetSpeech() {
+function resetSpeech(){
   stopSpeech(); spSecs=60; spText='';
   const ring=document.getElementById('speech-ring'),num=document.getElementById('speech-num'),btn=document.getElementById('speech-btn');
   ring.style.strokeDashoffset='0'; ring.classList.remove('urgent');
