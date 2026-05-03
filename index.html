@@ -35,7 +35,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
 .badge-done{display:inline-block;background:#c5df98;color:#3a6c10;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;}
 
-/* ---- 日付ナビゲーター ---- */
+/* 日付ナビ */
 .day-nav{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:16px;padding:12px 16px;margin-bottom:12px;border:0.5px solid #e5e2da;}
 .day-nav-btn{width:40px;height:40px;border-radius:50%;border:none;background:#f5f3ee;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
 .day-nav-btn:active{background:#ede9e0;}
@@ -45,7 +45,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .day-nav-label{font-size:16px;font-weight:700;color:#2c2c2a;}
 .day-nav-today{font-size:11px;color:#4a7d1a;font-weight:600;margin-top:2px;}
 
-/* ---- bnav ---- */
+/* bnav */
 .bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #e5e2da;display:flex;padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:100;}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;}
 .bnav-icon{font-size:22px;color:#aaa9a0;}
@@ -53,7 +53,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .bnav-item.on .bnav-icon,.bnav-item.on .bnav-label{color:#4a7d1a;}
 .bnav-item.on .bnav-label{font-weight:700;}
 
-/* ---- タイムアタック ---- */
+/* タイムアタック */
 .phrase-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;margin-bottom:20px;border:0.5px solid #e5e2da;min-height:170px;display:flex;flex-direction:column;justify-content:center;}
 .phrase-jp{font-size:22px;font-weight:700;color:#2c2c2a;line-height:1.4;}
 .phrase-en{font-size:17px;font-weight:600;color:#4a7d1a;margin-top:16px;display:none;line-height:1.4;}
@@ -65,17 +65,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .ring-fill.urgent{stroke:#e24b4a;}
 .ring-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:34px;font-weight:700;color:#2c2c2a;font-variant-numeric:tabular-nums;}
 .ring-num.urgent{color:#e24b4a;}
-.score-row{display:flex;justify-content:center;gap:28px;margin-bottom:16px;}
+.score-row{display:flex;justify-content:center;gap:20px;margin-bottom:16px;}
 .score-item{text-align:center;}
-.score-val{font-size:30px;font-weight:700;color:#2c2c2a;}
+.score-val{font-size:28px;font-weight:700;color:#2c2c2a;}
 .score-lbl{font-size:11px;color:#888780;margin-top:2px;}
 
-/* ---- スピーチ ---- */
+/* 定着バッジ */
+.mastery-badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:10px;margin-left:6px;font-weight:700;vertical-align:middle;}
+.mastery-0{background:#fde8e8;color:#c0392b;}
+.mastery-1{background:#fef3cd;color:#b7770d;}
+.mastery-2{background:#c5df98;color:#3a6c10;}
+
+/* スピーチ */
 .transcript{background:#ede9e0;border-radius:12px;padding:16px;min-height:100px;font-size:15px;color:#5f5e5a;line-height:1.7;margin-top:16px;white-space:pre-wrap;}
 .rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#e24b4a;margin-right:6px;animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
 
-/* ---- 設定 ---- */
+/* 設定 */
 .set-label{font-size:13px;font-weight:600;color:#5f5e5a;margin-bottom:6px;}
 .set-input{width:100%;padding:12px;border:0.5px solid #e0ddd5;border-radius:10px;font-size:14px;background:#fff;color:#2c2c2a;margin-bottom:16px;}
 .set-input:focus{outline:none;border-color:#4a7d1a;}
@@ -84,13 +90,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .empty-text{font-size:15px;line-height:1.6;}
 .status-msg{text-align:center;font-size:14px;color:#888780;padding:10px;}
 .status-msg.ok{color:#4a7d1a;}
-.status-msg.err{color:#e24b4a;}
 .result-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;border:0.5px solid #e5e2da;margin-bottom:16px;}
 .result-score{font-size:56px;font-weight:800;line-height:1;}
 .result-label{font-size:14px;color:#5f5e5a;margin-top:8px;}
 .result-msg{font-size:15px;margin-top:16px;line-height:1.6;color:#2c2c2a;}
 
-/* ---- QRモーダル ---- */
+/* QRモーダル */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
 .modal{background:#fff;border-radius:24px;padding:28px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);}
@@ -102,7 +107,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 </head>
 <body>
 
-<!-- ============ HOME ============ -->
 <div class="screen active" id="screen-home">
   <div class="topbar">
     <div class="topbar-sub">English Learning</div>
@@ -113,16 +117,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   </div>
 </div>
 
-<!-- ============ TIME ATTACK ============ -->
 <div class="screen" id="screen-attack">
   <div class="topbar">
-    <div class="topbar-sub">Phrase_JP → Phrase_EN / 10秒</div>
+    <div class="topbar-sub">弱いものを集中トレーニング</div>
     <div class="topbar-title">タイムアタック</div>
   </div>
   <div class="content" id="attack-content"></div>
 </div>
 
-<!-- ============ SPEECH ============ -->
 <div class="screen" id="screen-speech">
   <div class="topbar">
     <div class="topbar-sub">Recording & Transcript</div>
@@ -143,7 +145,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   </div>
 </div>
 
-<!-- ============ SETTINGS ============ -->
 <div class="screen" id="screen-settings">
   <div class="topbar"><div class="topbar-title">設定</div></div>
   <div class="content" style="padding-top:20px;">
@@ -170,7 +171,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   </div>
 </div>
 
-<!-- QRモーダル -->
 <div class="modal-overlay" id="qr-modal" onclick="closeQR(event)">
   <div class="modal">
     <div class="modal-title">📱 スマホで読み取って！</div>
@@ -217,10 +217,8 @@ const TASKS = {
 const CIRC_SMALL = 2 * Math.PI * 52;
 const CIRC_BIG   = 2 * Math.PI * 56;
 
-// 表示中の日付オフセット（0=今日、-1=昨日、-2=一昨日…）
 let dayOffset = 0;
 
-// URLパラメータ → localStorage
 function applyUrlParams() {
   const p = new URLSearchParams(location.search);
   if (!p.get('gas')) return;
@@ -261,7 +259,6 @@ function loadSettingsForm() {
   document.getElementById('s-gss').value   = cfg.gssUrl;
   document.getElementById('settings-status').textContent = '';
 }
-
 function showQR() {
   if (!cfg.gasUrl) { alert('先に設定を保存してください'); return; }
   const params = new URLSearchParams({gas:cfg.gasUrl, start:cfg.startDate, gpt:cfg.gptUrl, gss:cfg.gssUrl});
@@ -276,39 +273,22 @@ function closeQR(e) {
     document.getElementById('qr-modal').classList.remove('show');
 }
 
-// =============================================
-//  日付ユーティリティ
-// =============================================
-function jstDate(d) {
-  return d.toLocaleDateString('sv', {timeZone:'Asia/Tokyo'});
-}
-
-// offsetDays ずらした日付オブジェクトを返す
-function getOffsetDate(offset) {
-  const d = new Date();
-  d.setDate(d.getDate() + offset);
-  return d;
-}
-
-// その日のWeek番号を計算
+function jstDate(d) { return d.toLocaleDateString('sv', {timeZone:'Asia/Tokyo'}); }
+function getOffsetDate(offset) { const d = new Date(); d.setDate(d.getDate() + offset); return d; }
 function getWeekForDate(d) {
   if (!cfg.startDate) return 1;
   const start = new Date(cfg.startDate);
   const diff = Math.floor((d - start) / 86400000);
   return Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
 }
-
-// 全体情報（今日基準）
 function getInfo() {
-  const now = new Date();
-  const dow = now.getDay();
+  const now = new Date(); const dow = now.getDay();
   if (!cfg.startDate) return {week:1, dow, elapsed:0, remaining:56};
   const start = new Date(cfg.startDate);
-  const diff  = Math.floor((now - start) / 86400000);
-  const week  = Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
+  const diff = Math.floor((now - start) / 86400000);
+  const week = Math.min(8, Math.max(1, Math.floor(diff / 7) + 1));
   return {week, dow, elapsed:Math.max(0,diff), remaining:Math.max(0,56-diff)};
 }
-
 async function gas(params) {
   if (!cfg.gasUrl) return null;
   try {
@@ -317,12 +297,10 @@ async function gas(params) {
     return await res.json();
   } catch(e) { return null; }
 }
-
 function openUrl(url) {
   if (!url || url === '#') { alert('設定でURLを入力してください'); return; }
   window.open(url, '_blank');
 }
-
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('on'));
@@ -332,17 +310,12 @@ function showScreen(name) {
   if (name === 'attack')   initAttack();
   if (name === 'settings') loadSettingsForm();
 }
-
-// 日付をずらしてホームを再描画
 function shiftDay(delta) {
   const next = dayOffset + delta;
-  // 未来はNG
   if (next > 0) return;
-  // 学習開始日より前はNG
   if (cfg.startDate) {
     const targetDate = getOffsetDate(next);
-    const start = new Date(cfg.startDate);
-    if (targetDate < start) return;
+    if (targetDate < new Date(cfg.startDate)) return;
   }
   dayOffset = next;
   renderHome();
@@ -354,18 +327,14 @@ function shiftDay(delta) {
 let progress = [];
 
 async function renderHome() {
-  // 表示対象の日付
   const targetDate = getOffsetDate(dayOffset);
   const targetDow  = targetDate.getDay();
   const targetDateStr = jstDate(targetDate);
   const isToday = dayOffset === 0;
-
-  const info     = getInfo(); // 今日のweek/elapsed/remaining
+  const info     = getInfo();
   const viewWeek = getWeekForDate(targetDate);
   const weekData = WEEKS[viewWeek - 1];
   const task     = TASKS[targetDow] || null;
-
-  // タイトル
   const titleStr = isToday
     ? `Week ${info.week} · 今日（${DAY[targetDow]}曜日）`
     : `Week ${viewWeek} · ${DAY[targetDow]}曜日`;
@@ -376,32 +345,27 @@ async function renderHome() {
     if (r && r.progress) progress = r.progress;
   }
 
-  const todayStr  = jstDate(new Date());
-  const dayDone   = progress.some(p => p.date === targetDateStr && p.done);
-  const weekDone  = progress.filter(p => p.week === String(viewWeek) && p.done).length;
+  const dayDone  = progress.some(p => p.date === targetDateStr && p.done);
+  const weekDone = progress.filter(p => p.week === String(viewWeek) && p.done).length;
 
   let html = '';
 
-  // ── 日付ナビゲーター ──
   const canPrev = cfg.startDate
     ? getOffsetDate(dayOffset - 1) >= new Date(cfg.startDate)
     : dayOffset > -56;
   const canNext = dayOffset < 0;
-
-  // 日付表示
   const dateLabel = targetDate.toLocaleDateString('ja-JP', {month:'long', day:'numeric', timeZone:'Asia/Tokyo'});
 
   html += `<div class="day-nav">
-    <button class="day-nav-btn" onclick="shiftDay(-1)" ${canPrev ? '' : 'disabled'}>◀</button>
+    <button class="day-nav-btn" onclick="shiftDay(-1)" ${canPrev?'':'disabled'}>◀</button>
     <div class="day-nav-center">
       <div class="day-nav-date">${dateLabel}</div>
       <div class="day-nav-label">${DAY[targetDow]}曜日</div>
       ${isToday ? '<div class="day-nav-today">TODAY</div>' : ''}
     </div>
-    <button class="day-nav-btn" onclick="shiftDay(+1)" ${canNext ? '' : 'disabled'}>▶</button>
+    <button class="day-nav-btn" onclick="shiftDay(+1)" ${canNext?'':'disabled'}>▶</button>
   </div>`;
 
-  // テーマ＆進捗カード
   html += `<div class="card">
     <div class="card-label">Week ${viewWeek} のテーマ</div>
     <div class="card-big">Week ${viewWeek}</div>
@@ -410,7 +374,6 @@ async function renderHome() {
     <div class="pbar-label">今週 ${weekDone}/5日 完了</div>
   </div>`;
 
-  // 残り/経過（今日表示のときだけ）
   if (isToday) {
     html += `<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
       <div><div class="card-label">残り</div>
@@ -422,7 +385,6 @@ async function renderHome() {
     </div>`;
   }
 
-  // タスクカード
   if (task) {
     const linkBtns = task.links.map(l => {
       if (l === 'gpt')    return `<button class="btn btn-outline" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
@@ -431,29 +393,25 @@ async function renderHome() {
       if (l === 'speech') return `<button class="btn btn-outline" onclick="showScreen('speech')">スピーチ →</button>`;
       return '';
     }).join('');
-
     html += `<div class="card">
-      <div class="card-label">${isToday ? '今日やること' : 'この日のタスク'}</div>
+      <div class="card-label">${isToday?'今日やること':'この日のタスク'}</div>
       <div style="font-size:16px;font-weight:700;margin-bottom:6px;">${DAY[targetDow]}：${task.label}</div>
       <div class="card-sub">${task.desc}</div>
       <div class="btn-grid" style="margin-top:14px;">${linkBtns}</div>
       <div style="margin-top:14px;">`;
-
     if (dayDone) {
-      html += `<span class="badge-done">✅ ${isToday ? '今日' : 'この日'}の学習 完了！</span>`;
+      html += `<span class="badge-done">✅ ${isToday?'今日':'この日'}の学習 完了！</span>`;
     } else {
-      // 未来はボタンなし、過去・今日はボタンあり
       const dateParam = isToday ? 'null' : `'${targetDateStr}'`;
       html += `<button class="btn btn-green" onclick="markDone(${viewWeek},${targetDow},'${task.label}',${dateParam})">✅ やった！</button>`;
     }
     html += `</div></div>`;
   } else {
     html += `<div class="card"><div class="card-sub" style="text-align:center;padding:8px 0;">
-      ${targetDow === 0 || targetDow === 6 ? '休息日🎉 お疲れ様でした！' : 'この日はタスクがありません'}
+      ${targetDow===0||targetDow===6?'休息日🎉 お疲れ様でした！':'この日はタスクがありません'}
     </div></div>`;
   }
 
-  // 8週間ドット
   html += `<div class="card"><div class="card-label">8週間の進捗</div><div class="dots">`;
   for (let i = 1; i <= 8; i++) {
     const wDone = progress.filter(p => p.week === String(i) && p.done).length;
@@ -483,47 +441,122 @@ async function markDone(week, dayNum, task, dateStr) {
 }
 
 // =============================================
-//  TIME ATTACK
+//  TIME ATTACK  ★ 学習アルゴリズム
+//
+//  各フレーズに mastery（定着度）を持たせる
+//    0 = 未正解 / 間違い → 毎回出す
+//    1 = 1回正解 → 2回に1回出す（まぐれかも）
+//    2 = 2回連続正解 → 完全習得、プールから除外
+//
+//  出題順はシャッフルし、mastery=1のものは
+//  スキップカウンターで間引く
 // =============================================
-let phrases=[], attIdx=0, attCorrect=0, attTimer=null, attSecs=10, attRevealed=false;
+let phrases      = [];  // 元データ
+let phraseStates = [];  // {phrase, mastery, skipCount}
+let attCorrect   = 0;
+let attTotal     = 0;
+let attTimer     = null;
+let attSecs      = 10;
+let attRevealed  = false;
+let currentIdx   = 0;   // phraseStates上の現在インデックス
 
 async function initAttack() {
-  const el = document.getElementById('attack-content');
+  const el   = document.getElementById('attack-content');
   const info = getInfo();
-  attCorrect=0; attIdx=0;
+  attCorrect = 0;
+  attTotal   = 0;
   clearInterval(attTimer);
+
   if (!cfg.gasUrl) {
-    el.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div>
+    el.innerHTML = `<div class="empty"><div class="empty-icon">⚙️</div>
       <div class="empty-text">設定からGAS URLを入力してください</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="showScreen('settings')">設定を開く →</button></div>`;
     return;
   }
-  el.innerHTML='<div class="status-msg">フレーズを取得中...</div>';
-  const r = await gas({action:'getPhrases', week:info.week});
-  if (!r || !r.phrases || r.phrases.length===0) {
-    el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
+
+  el.innerHTML = '<div class="status-msg">フレーズを取得中...</div>';
+  const r = await gas({action:'getPhrases', week: info.week});
+
+  if (!r || !r.phrases || r.phrases.length === 0) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
       <div class="empty-text">今週のフレーズがまだありません。</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button></div>`;
     return;
   }
-  phrases=r.phrases.filter(p=>p.Phrase_JP&&p.Phrase_EN).sort(()=>Math.random()-.5);
-  if (phrases.length===0) {
-    el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
+
+  phrases = r.phrases.filter(p => p.Phrase_JP && p.Phrase_EN)
+                     .sort(() => Math.random() - 0.5);
+
+  if (phrases.length === 0) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
       <div class="empty-text">Phrase_JPとPhrase_ENが入力されているフレーズがありません。</div></div>`;
     return;
   }
+
+  // 全フレーズを mastery=0 で初期化
+  phraseStates = phrases.map(p => ({ phrase: p, mastery: 0, skipCounter: 0 }));
+  currentIdx   = 0;
   renderAttackQ();
+}
+
+// アクティブなフレーズ数（mastery < 2）
+function activeCount() {
+  return phraseStates.filter(s => s.mastery < 2).length;
+}
+
+// 次に出すフレーズを選ぶ
+// mastery=0 → 必ず出す
+// mastery=1 → skipCounter が偶数のときだけ出す（2回に1回）
+function getNextState() {
+  const active = phraseStates.filter(s => s.mastery < 2);
+  if (active.length === 0) return null;
+
+  // mastery=0 を優先
+  const urgent = active.filter(s => s.mastery === 0);
+  if (urgent.length > 0) {
+    return urgent[Math.floor(Math.random() * urgent.length)];
+  }
+
+  // mastery=1 の中でスキップしないもの
+  const ready = active.filter(s => s.mastery === 1 && s.skipCounter % 2 === 0);
+  if (ready.length > 0) {
+    return ready[Math.floor(Math.random() * ready.length)];
+  }
+
+  // 全部スキップ対象なら skipCounter を進めて再選
+  active.forEach(s => { if (s.mastery === 1) s.skipCounter++; });
+  return active[Math.floor(Math.random() * active.length)];
 }
 
 function renderAttackQ() {
   clearInterval(attTimer);
-  if (attIdx>=phrases.length){renderAttackResult();return;}
-  attSecs=10; attRevealed=false;
-  const p=phrases[attIdx];
-  document.getElementById('attack-content').innerHTML=`
+
+  const state = getNextState();
+  if (!state) { renderAttackResult(); return; }
+
+  attSecs     = 10;
+  attRevealed = false;
+  const p     = state.phrase;
+  const remaining = activeCount();
+  const masteredCount = phraseStates.filter(s => s.mastery >= 2).length;
+
+  // 定着バッジ
+  const masteryLabel = ['🔴 要練習', '🟡 もう少し', '🟢 習得！'];
+
+  document.getElementById('attack-content').innerHTML = `
     <div class="score-row">
-      <div class="score-item"><div class="score-val">${attIdx+1}/${phrases.length}</div><div class="score-lbl">問題</div></div>
-      <div class="score-item"><div class="score-val" style="color:#4a7d1a">${attCorrect}</div><div class="score-lbl">正解</div></div>
+      <div class="score-item">
+        <div class="score-val">${remaining}</div>
+        <div class="score-lbl">残り</div>
+      </div>
+      <div class="score-item">
+        <div class="score-val" style="color:#4a7d1a">${masteredCount}</div>
+        <div class="score-lbl">習得済み</div>
+      </div>
+      <div class="score-item">
+        <div class="score-val">${phrases.length}</div>
+        <div class="score-lbl">合計</div>
+      </div>
     </div>
     <div class="phrase-card">
       <div class="phrase-jp">${escHtml(p.Phrase_JP)}</div>
@@ -538,46 +571,79 @@ function renderAttackQ() {
       <div class="ring-num" id="att-num">10</div>
     </div>
     <button class="btn btn-green" id="att-btn" onclick="revealAttack()">答えを見る</button>`;
-  attTimer=setInterval(()=>{
+
+  // 現在のstateを保存（scoreAttで参照）
+  window._currentState = state;
+
+  attTimer = setInterval(() => {
     attSecs--;
-    const ring=document.getElementById('att-ring'),num=document.getElementById('att-num');
-    if(!ring){clearInterval(attTimer);return;}
-    ring.style.strokeDashoffset=(CIRC_SMALL*(1-attSecs/10)).toFixed(1);
-    num.textContent=attSecs;
-    if(attSecs<=3){ring.classList.add('urgent');num.classList.add('urgent');}
-    if(attSecs<=0){clearInterval(attTimer);revealAttack();}
-  },1000);
+    const ring = document.getElementById('att-ring');
+    const num  = document.getElementById('att-num');
+    if (!ring) { clearInterval(attTimer); return; }
+    ring.style.strokeDashoffset = (CIRC_SMALL * (1 - attSecs / 10)).toFixed(1);
+    num.textContent = attSecs;
+    if (attSecs <= 3) { ring.classList.add('urgent'); num.classList.add('urgent'); }
+    if (attSecs <= 0) { clearInterval(attTimer); revealAttack(); }
+  }, 1000);
 }
 
 function revealAttack() {
-  if(attRevealed)return;
-  clearInterval(attTimer); attRevealed=true;
+  if (attRevealed) return;
+  clearInterval(attTimer);
+  attRevealed = true;
   document.getElementById('att-en').classList.add('show');
-  const btn=document.getElementById('att-btn');
-  if(btn)btn.style.display='none';
-  const wrap=document.createElement('div');
-  wrap.className='btn-grid'; wrap.style.marginTop='0';
-  wrap.innerHTML=`<button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
-    <button class="btn btn-gray" onclick="scoreAtt(false)">❌ 言えなかった</button>`;
+  const btn = document.getElementById('att-btn');
+  if (btn) btn.style.display = 'none';
+  const wrap = document.createElement('div');
+  wrap.className = 'btn-grid';
+  wrap.style.marginTop = '0';
+  wrap.innerHTML = `
+    <button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
+    <button class="btn btn-gray"  onclick="scoreAtt(false)">❌ 言えなかった</button>`;
   document.getElementById('attack-content').appendChild(wrap);
 }
 
-function scoreAtt(ok){if(ok)attCorrect++;attIdx++;renderAttackQ();}
+function scoreAtt(ok) {
+  const state = window._currentState;
+  if (!state) { renderAttackQ(); return; }
+
+  if (ok) {
+    attCorrect++;
+    state.mastery = Math.min(2, state.mastery + 1); // 0→1→2
+    state.skipCounter = 0;
+  } else {
+    state.mastery = 0; // 間違えたら0に戻す
+    state.skipCounter = 0;
+  }
+
+  attTotal++;
+
+  // mastery=1 のものはskipCounterを進める
+  phraseStates.forEach(s => {
+    if (s.mastery === 1 && s !== state) s.skipCounter++;
+  });
+
+  renderAttackQ();
+}
 
 function renderAttackResult() {
-  const total=phrases.length,pct=Math.round(attCorrect/total*100);
-  const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
-  const msg=pct>=80?'素晴らしい！しっかり定着してます 🌟':pct>=50?'いい調子！続けましょう 💪':'まだ練習が必要です。もう一回挑戦！ 📖';
-  document.getElementById('attack-content').innerHTML=`
+  const total    = phrases.length;
+  const mastered = phraseStates.filter(s => s.mastery >= 2).length;
+  const pct      = Math.round(mastered / total * 100);
+  const emoji    = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
+  const msg      = pct >= 80 ? '素晴らしい！全部習得しました 🌟'
+                 : pct >= 50 ? 'いい調子！続けましょう 💪'
+                 : 'まだ練習が必要です。もう一回！ 📖';
+  document.getElementById('attack-content').innerHTML = `
     <div class="result-card">
       <div style="font-size:48px;margin-bottom:12px;">${emoji}</div>
-      <div class="card-label">スコア</div>
-      <div class="result-score" style="color:${pct>=80?'#4a7d1a':'#2c2c2a'}">${pct}<span style="font-size:24px;font-weight:500">%</span></div>
-      <div class="result-label">${attCorrect} / ${total} 正解</div>
+      <div class="card-label">習得状況</div>
+      <div class="result-score" style="color:${pct>=80?'#4a7d1a':'#2c2c2a'}">${mastered}<span style="font-size:24px;font-weight:500">/${total}</span></div>
+      <div class="result-label">習得済み / 全フレーズ</div>
       <div class="result-msg">${msg}</div>
     </div>
-    <button class="btn btn-green" onclick="initAttack()">もう一回</button>
-    <button class="btn btn-gray" onclick="showScreen('home')">ホームへ</button>`;
+    <button class="btn btn-green" onclick="initAttack()">もう一回（リセット）</button>
+    <button class="btn btn-gray"  onclick="showScreen('home')">ホームへ</button>`;
 }
 
 // =============================================
@@ -585,7 +651,7 @@ function renderAttackResult() {
 // =============================================
 let spTimer=null,spSecs=60,spRunning=false,spRec=null,spText='';
 function toggleSpeech(){spRunning?stopSpeech():startSpeech();}
-function startSpeech() {
+function startSpeech(){
   spRunning=true; spText='';
   document.getElementById('speech-btn').textContent='録音停止';
   document.getElementById('transcript').innerHTML='<span class="rec-dot"></span>聞いています...';
