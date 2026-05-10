@@ -18,7 +18,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .card-label{font-size:11px;color:#888780;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
 .card-big{font-size:26px;font-weight:700;color:#2c2c2a;}
 .card-sub{font-size:14px;color:#5f5e5a;margin-top:4px;line-height:1.55;}
-.pbar-wrap{margin:12px 0 4px;}
 .pbar{background:#ede9e0;border-radius:8px;height:8px;overflow:hidden;}
 .pbar-fill{background:#4a7d1a;height:100%;border-radius:8px;transition:width .5s;}
 .pbar-label{font-size:11px;color:#888780;margin-top:4px;}
@@ -31,8 +30,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
 .badge-done{display:inline-block;background:#c5df98;color:#3a6c10;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;}
 .badge-future{display:inline-block;background:#ede9e0;color:#888780;font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;}
-
-/* Day ナビゲーター */
 .day-nav{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:16px;padding:14px 16px;margin-bottom:12px;border:0.5px solid #e5e2da;}
 .day-nav-btn{width:42px;height:42px;border-radius:50%;border:none;background:#f5f3ee;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
 .day-nav-btn:active{background:#ede9e0;}
@@ -44,8 +41,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .badge-current{background:#4a7d1a;color:#fff;}
 .badge-done-small{background:#c5df98;color:#3a6c10;}
 .badge-future-small{background:#ede9e0;color:#888780;}
-
-/* ステップリスト */
 .step-list{margin-top:14px;}
 .step-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px solid #f0ede5;}
 .step-item:last-child{border-bottom:none;}
@@ -53,23 +48,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .step-text{font-size:14px;color:#2c2c2a;line-height:1.6;flex:1;}
 .step-link{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:#4a7d1a;background:#f0f7e8;padding:4px 10px;border-radius:20px;border:none;cursor:pointer;}
 .step-link:active{opacity:.7;}
-
-/* チャプタードット */
 .chapter-dots{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.ch-dot{border-radius:10px;padding:6px 10px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px;}
+.ch-dot{border-radius:10px;padding:6px 10px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:4px;cursor:pointer;}
 .ch-dot-done{background:#c5df98;color:#3a6c10;}
 .ch-dot-now{background:#4a7d1a;color:#fff;}
 .ch-dot-future{background:#ede9e0;color:#999;}
-
-/* bnav */
 .bnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:0.5px solid #e5e2da;display:flex;padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:100;}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;cursor:pointer;}
 .bnav-icon{font-size:22px;color:#aaa9a0;}
 .bnav-label{font-size:10px;color:#aaa9a0;}
 .bnav-item.on .bnav-icon,.bnav-item.on .bnav-label{color:#4a7d1a;}
 .bnav-item.on .bnav-label{font-weight:700;}
-
-/* タイムアタック */
 .phrase-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;margin-bottom:20px;border:0.5px solid #e5e2da;min-height:170px;display:flex;flex-direction:column;justify-content:center;}
 .phrase-jp{font-size:22px;font-weight:700;color:#2c2c2a;line-height:1.4;}
 .phrase-en{font-size:17px;font-weight:600;color:#4a7d1a;margin-top:16px;display:none;line-height:1.4;}
@@ -85,13 +74,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .score-item{text-align:center;}
 .score-val{font-size:28px;font-weight:700;color:#2c2c2a;}
 .score-lbl{font-size:11px;color:#888780;margin-top:2px;}
-
-/* スピーチ */
 .transcript{background:#ede9e0;border-radius:12px;padding:16px;min-height:100px;font-size:15px;color:#5f5e5a;line-height:1.7;margin-top:16px;white-space:pre-wrap;}
 .rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#e24b4a;margin-right:6px;animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-
-/* 設定 */
 .set-label{font-size:13px;font-weight:600;color:#5f5e5a;margin-bottom:6px;}
 .set-input{width:100%;padding:12px;border:0.5px solid #e0ddd5;border-radius:10px;font-size:14px;background:#fff;color:#2c2c2a;margin-bottom:16px;}
 .set-input:focus{outline:none;border-color:#4a7d1a;}
@@ -104,8 +89,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .result-score{font-size:56px;font-weight:800;line-height:1;}
 .result-label{font-size:14px;color:#5f5e5a;margin-top:8px;}
 .result-msg{font-size:15px;margin-top:16px;line-height:1.6;color:#2c2c2a;}
-
-/* QRモーダル */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
 .modal-overlay.show{display:flex;}
 .modal{background:#fff;border-radius:24px;padding:28px 24px;text-align:center;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);}
@@ -195,90 +178,52 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 </nav>
 
 <script>
-// =============================================
-//  CURRICULUM DEFINITION
-//  全40Day = 8 Chapter × 5 Day
-// =============================================
 const CHAPTERS = [
-  { ch:1, theme:'Indian food 基本' },
-  { ch:2, theme:'Indian food 文化・応用' },
-  { ch:3, theme:'Travel 行きたい理由' },
-  { ch:4, theme:'India trip 実践' },
-  { ch:5, theme:'Daily life 会話' },
-  { ch:6, theme:'Making friends 雑談' },
-  { ch:7, theme:'My story 自分の話' },
-  { ch:8, theme:'ロールプレイ 実戦' },
+  {ch:1, theme:'Indian food 基本'},
+  {ch:2, theme:'Indian food 文化・応用'},
+  {ch:3, theme:'Travel 行きたい理由'},
+  {ch:4, theme:'India trip 実践'},
+  {ch:5, theme:'Daily life 会話'},
+  {ch:6, theme:'Making friends 雑談'},
+  {ch:7, theme:'My story 自分の話'},
+  {ch:8, theme:'ロールプレイ 実戦'},
 ];
-
-// Day番号(1-40) → Chapter番号(1-8)
-function chapterOf(dayNum) { return Math.ceil(dayNum / 5); }
-// Day番号(1-40) → Chapter内のDay(1-5)
-function dayInChapter(dayNum) { return ((dayNum - 1) % 5) + 1; }
-
-// Day typeごとのタスク定義（steps に具体的な手順）
 const DAY_TYPES = {
-  1: {
-    label: 'インプット＋収集',
-    desc:  'GPTと日本語で話してフレーズを集める',
-    links: ['gpt','gss'],
-    steps: [
-      { text: 'GPTを開いて、今週のテーマについて日本語で話しかける', link: 'gpt' },
-      { text: 'GPTが使った表現・フレーズを3〜5個ピックアップする', link: null },
-      { text: 'GSSのフレーズシートに Phrase_EN と Phrase_JP を記録する', link: 'gss' },
-    ],
-  },
-  2: {
-    label: '軽く使う',
-    desc:  'フレーズを声に出して自分の言葉で使ってみる',
-    links: ['gss','attack'],
-    steps: [
-      { text: 'GSSのフレーズを声に出して全部読む', link: 'gss' },
-      { text: '気に入ったフレーズを使って1〜2文、自分の状況に合わせて作る', link: null },
-      { text: 'タイムアタックで定着を確認する', link: 'attack' },
-    ],
-  },
-  3: {
-    label: '会話（メイン）',
-    desc:  'GPTと英語で3〜5分会話する',
-    links: ['gpt','gss'],
-    steps: [
-      { text: 'GPTを開いて英語で話しかける（例：Let\'s talk about Indian food!）', link: 'gpt' },
-      { text: '3〜5分、できるだけ英語で会話を続ける', link: null },
-      { text: '新しく出てきた表現があればGSSに追加する', link: 'gss' },
-    ],
-  },
-  4: {
-    label: '復習',
-    desc:  '今週のフレーズをまとめて定着させる',
-    links: ['attack','gss'],
-    steps: [
-      { text: 'GSSのフレーズを最初から全部声に出して音読する', link: 'gss' },
-      { text: 'タイムアタックで苦手なものを重点的に練習する', link: 'attack' },
-      { text: '🟢 習得済みになるまで繰り返す', link: null },
-    ],
-  },
-  5: {
-    label: '1分スピーチ',
-    desc:  '今週学んだ表現を全部使って1分話し続ける',
-    links: ['speech'],
-    steps: [
-      { text: 'GSSのフレーズをざっと見て今週の表現を思い出す', link: 'gss' },
-      { text: '「スピーチ」画面を開いて録音ボタンを押す', link: 'speech' },
-      { text: '1分間、今週のテーマについて英語で話し続ける（詰まってもOK！）', link: null },
-    ],
-  },
+  1:{label:'インプット＋収集', desc:'GPTと日本語で話してフレーズを集める', steps:[
+    {text:'GPTを開いて、今週のテーマについて日本語で話しかける', link:'gpt'},
+    {text:'GPTが使った表現・フレーズを3〜5個ピックアップする', link:null},
+    {text:'GSSのフレーズシートに Phrase_EN と Phrase_JP を記録する', link:'gss'},
+  ]},
+  2:{label:'軽く使う', desc:'フレーズを声に出して自分の言葉で使ってみる', steps:[
+    {text:'GSSのフレーズを声に出して全部読む', link:'gss'},
+    {text:'気に入ったフレーズで1〜2文、自分の状況に合わせて作る', link:null},
+    {text:'タイムアタックで定着を確認する', link:'attack'},
+  ]},
+  3:{label:'会話（メイン）', desc:'GPTと英語で3〜5分会話する', steps:[
+    {text:"GPTを開いて英語で話しかける（例：Let's talk about Indian food!）", link:'gpt'},
+    {text:'3〜5分、できるだけ英語で会話を続ける', link:null},
+    {text:'新しく出てきた表現があればGSSに追加する', link:'gss'},
+  ]},
+  4:{label:'復習', desc:'今週のフレーズをまとめて定着させる', steps:[
+    {text:'GSSのフレーズを最初から全部声に出して音読する', link:'gss'},
+    {text:'タイムアタックで苦手なものを重点的に練習する', link:'attack'},
+    {text:'🟢 習得済みになるまで繰り返す', link:null},
+  ]},
+  5:{label:'1分スピーチ', desc:'今週学んだ表現を全部使って1分話し続ける', steps:[
+    {text:'GSSのフレーズをざっと見て今週の表現を思い出す', link:'gss'},
+    {text:'「スピーチ」画面を開いて録音ボタンを押す', link:'speech'},
+    {text:'1分間、今週のテーマについて英語で話し続ける（詰まってもOK！）', link:null},
+  ]},
 };
-
 const TOTAL_DAYS = 40;
 const CIRC_SMALL = 2 * Math.PI * 52;
 const CIRC_BIG   = 2 * Math.PI * 56;
 
-// 表示中のDay番号（ナビで変わる）
-let viewingDay = 1;
+function chapterOf(d)    { return Math.ceil(d / 5); }
+function dayInChapter(d) { return ((d - 1) % 5) + 1; }
 
-// =============================================
-//  CONFIG
-// =============================================
+let viewingDay = 0;
+
 function applyUrlParams() {
   const p = new URLSearchParams(location.search);
   if (!p.get('gas')) return;
@@ -306,7 +251,7 @@ function saveSettings() {
   const el = document.getElementById('settings-status');
   el.textContent = '✅ 保存しました';
   el.className = 'status-msg ok';
-  setTimeout(() => { showScreen('home'); }, 800);
+  setTimeout(() => showScreen('home'), 800);
 }
 function loadSettingsForm() {
   document.getElementById('s-gas').value = cfg.gasUrl;
@@ -328,9 +273,6 @@ function closeQR(e) {
     document.getElementById('qr-modal').classList.remove('show');
 }
 
-// =============================================
-//  GAS通信
-// =============================================
 async function gas(params) {
   if (!cfg.gasUrl) return null;
   try {
@@ -339,12 +281,10 @@ async function gas(params) {
     return await res.json();
   } catch(e) { return null; }
 }
-
 function openUrl(url) {
   if (!url || url === '#') { alert('設定でURLを入力してください'); return; }
   window.open(url, '_blank');
 }
-
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('on'));
@@ -358,73 +298,61 @@ function showScreen(name) {
 // =============================================
 //  HOME
 // =============================================
-let completedDays = new Set(); // 完了したDay番号のSet
+let completedDays = new Set();
 
 async function renderHome() {
   document.getElementById('home-title').textContent = '読み込み中...';
-
   if (cfg.gasUrl) {
     const r = await gas({action:'getProgress'});
-    if (r && r.completedDays) {
-      completedDays = new Set(r.completedDays.map(Number));
-    }
+    if (r && r.completedDays) completedDays = new Set(r.completedDays.map(Number));
   }
-
-  // 現在のDay = 最初の未完了Day（デフォルト）
+  // 最初の未完了Day
   let currentDay = 1;
   for (let d = 1; d <= TOTAL_DAYS; d++) {
     if (!completedDays.has(d)) { currentDay = d; break; }
   }
-  // 全完了の場合
   if (completedDays.size >= TOTAL_DAYS) currentDay = TOTAL_DAYS;
-
-  // viewingDay が未設定 or ホームに戻ったとき → currentDayへ
   if (viewingDay === 0) viewingDay = currentDay;
-
   renderHomeContent(currentDay);
 }
 
 function renderHomeContent(currentDay) {
-  const d        = viewingDay;
-  const ch       = chapterOf(d);
-  const dayType  = dayInChapter(d);
-  const chapter  = CHAPTERS[ch - 1];
-  const task     = DAY_TYPES[dayType];
-  const isDone   = completedDays.has(d);
-  const isCurrent = d === viewingDay;
+  const d       = viewingDay;
+  const ch      = chapterOf(d);
+  const dayType = dayInChapter(d);
+  const chapter = CHAPTERS[ch - 1];
+  const task    = DAY_TYPES[dayType];
+  const isDone  = completedDays.has(d);
 
-  // 状態判定
-  let status = 'future';
+  // ★ バグ修正：Day1は常にcurrent、それ以外は完了済み最大+1まで
   const maxDone = completedDays.size > 0 ? Math.max(...completedDays) : 0;
-  if (isDone) status = 'done';
-  else if (d <= maxDone + 1) status = 'current';
+  let status = 'future';
+  if (isDone)                        status = 'done';
+  else if (d === 1 || d <= maxDone + 1) status = 'current';
 
   document.getElementById('home-title').textContent = `Chapter ${ch} · Day ${d}`;
-
   const totalDone = completedDays.size;
   const pct = Math.round(totalDone / TOTAL_DAYS * 100);
 
   let html = '';
 
-  // ── Day ナビゲーター ──
-  const canPrev = d > 1;
-  const canNext = d < TOTAL_DAYS;
+  // Dayナビ
   const statusLabel =
-    isDone   ? '<span class="day-nav-badge badge-done-small">✅ 完了</span>' :
-    status === 'current' ? '<span class="day-nav-badge badge-current">▶ 今ここ</span>' :
-    '<span class="day-nav-badge badge-future-small">🔒 まだ先</span>';
+    isDone          ? '<span class="day-nav-badge badge-done-small">✅ 完了</span>' :
+    status==='current' ? '<span class="day-nav-badge badge-current">▶ 今ここ</span>' :
+                      '<span class="day-nav-badge badge-future-small">🔒 まだ先</span>';
 
   html += `<div class="day-nav">
-    <button class="day-nav-btn" onclick="navDay(-1)" ${canPrev?'':'disabled'}>◀</button>
+    <button class="day-nav-btn" onclick="navDay(-1)" ${d>1?'':'disabled'}>◀</button>
     <div class="day-nav-center">
       <div class="day-nav-chapter">Chapter ${ch}「${chapter.theme}」</div>
       <div class="day-nav-day">Day ${d} <span style="font-size:13px;font-weight:400;color:#888780">/ ${TOTAL_DAYS}</span></div>
       ${statusLabel}
     </div>
-    <button class="day-nav-btn" onclick="navDay(+1)" ${canNext?'':'disabled'}>▶</button>
+    <button class="day-nav-btn" onclick="navDay(+1)" ${d<TOTAL_DAYS?'':'disabled'}>▶</button>
   </div>`;
 
-  // ── 全体進捗 ──
+  // 全体進捗
   html += `<div class="card">
     <div class="card-label">全体進捗</div>
     <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px;">
@@ -436,57 +364,46 @@ function renderHomeContent(currentDay) {
     <div class="pbar-label">残り ${TOTAL_DAYS - totalDone} Day</div>
   </div>`;
 
-  // ── タスクカード ──
+  // タスクカード
   html += `<div class="card">
     <div class="card-label">Day ${d} のタスク</div>
     <div style="font-size:17px;font-weight:700;margin-bottom:4px;">${task.label}</div>
     <div class="card-sub">${task.desc}</div>
     <div class="step-list">`;
-
   task.steps.forEach((step, i) => {
     html += `<div class="step-item">
       <div class="step-num">${i+1}</div>
       <div class="step-text">${step.text}`;
-    if (step.link) {
-      if (step.link === 'gpt')
-        html += `<br><button class="step-link" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
-      else if (step.link === 'gss')
-        html += `<br><button class="step-link" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button>`;
-      else if (step.link === 'attack')
-        html += `<br><button class="step-link" onclick="showScreen('attack')">タイムアタック →</button>`;
-      else if (step.link === 'speech')
-        html += `<br><button class="step-link" onclick="showScreen('speech')">スピーチ →</button>`;
-    }
+    if (step.link === 'gpt')
+      html += `<br><button class="step-link" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
+    else if (step.link === 'gss')
+      html += `<br><button class="step-link" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button>`;
+    else if (step.link === 'attack')
+      html += `<br><button class="step-link" onclick="showScreen('attack')">タイムアタック →</button>`;
+    else if (step.link === 'speech')
+      html += `<br><button class="step-link" onclick="showScreen('speech')">スピーチ →</button>`;
     html += `</div></div>`;
   });
-
   html += `</div><div style="margin-top:16px;">`;
 
   if (isDone) {
     html += `<span class="badge-done">✅ Day ${d} 完了！</span>`;
-    // 次のDayへボタン
-    if (d < TOTAL_DAYS) {
+    if (d < TOTAL_DAYS)
       html += `<button class="btn btn-outline" style="margin-top:10px;" onclick="navDay(+1)">次のDay へ →</button>`;
-    }
   } else if (status === 'future') {
     html += `<span class="badge-future">🔒 前のDayを完了してから</span>`;
   } else {
     html += `<button class="btn btn-green" onclick="markDone(${d})">✅ やった！</button>`;
   }
-
   html += `</div></div>`;
 
-  // ── Chapterドット ──
+  // Chapterドット
   html += `<div class="card"><div class="card-label">Chapter 進捗</div><div class="chapter-dots">`;
   for (let c = 1; c <= 8; c++) {
-    const chStart = (c-1)*5 + 1;
-    const chEnd   = c*5;
-    const chDone  = [...completedDays].filter(d => d >= chStart && d <= chEnd).length;
-    const currentCh = chapterOf(viewingDay);
-    const cls = chDone >= 5 ? 'ch-dot-done' : c === currentCh ? 'ch-dot-now' : 'ch-dot-future';
-    html += `<div class="ch-dot ${cls}" onclick="jumpToChapter(${c})" style="cursor:pointer;">
-      Ch${c} ${chDone}/5
-    </div>`;
+    const cs = (c-1)*5+1, ce = c*5;
+    const cd = [...completedDays].filter(x => x>=cs && x<=ce).length;
+    const cls = cd>=5 ? 'ch-dot-done' : c===chapterOf(viewingDay) ? 'ch-dot-now' : 'ch-dot-future';
+    html += `<div class="ch-dot ${cls}" onclick="jumpToChapter(${c})">Ch${c} ${cd}/5</div>`;
   }
   html += `</div></div>`;
 
@@ -505,7 +422,6 @@ function navDay(delta) {
   const next = viewingDay + delta;
   if (next < 1 || next > TOTAL_DAYS) return;
   viewingDay = next;
-  // currentDayを再計算
   let currentDay = 1;
   for (let d = 1; d <= TOTAL_DAYS; d++) {
     if (!completedDays.has(d)) { currentDay = d; break; }
@@ -514,7 +430,7 @@ function navDay(delta) {
 }
 
 function jumpToChapter(ch) {
-  viewingDay = (ch - 1) * 5 + 1;
+  viewingDay = (ch-1)*5+1;
   let currentDay = 1;
   for (let d = 1; d <= TOTAL_DAYS; d++) {
     if (!completedDays.has(d)) { currentDay = d; break; }
@@ -524,13 +440,11 @@ function jumpToChapter(ch) {
 
 async function markDone(dayNum) {
   if (!cfg.gasUrl) { showScreen('settings'); return; }
-  const ch      = chapterOf(dayNum);
-  const dayType = dayInChapter(dayNum);
-  const task    = DAY_TYPES[dayType];
-  const r = await gas({action:'saveProgress', dayNumber: dayNum, chapter: ch, task: task.label});
+  const ch   = chapterOf(dayNum);
+  const task = DAY_TYPES[dayInChapter(dayNum)];
+  const r = await gas({action:'saveProgress', dayNumber:dayNum, chapter:ch, task:task.label});
   if (r && r.success) {
     completedDays.add(dayNum);
-    // 次のDayへ自動移動
     if (dayNum < TOTAL_DAYS) viewingDay = dayNum + 1;
     let currentDay = 1;
     for (let d = 1; d <= TOTAL_DAYS; d++) {
@@ -543,74 +457,59 @@ async function markDone(dayNum) {
 }
 
 // =============================================
-//  TIME ATTACK（定着度アルゴリズム）
+//  TIME ATTACK
 // =============================================
-let phrases      = [];
-let phraseStates = [];
-let attCorrect   = 0;
-let attTimer     = null;
-let attSecs      = 10;
-let attRevealed  = false;
+let phrases=[], phraseStates=[], attCorrect=0, attTimer=null, attSecs=10, attRevealed=false;
 
 async function initAttack() {
   const el = document.getElementById('attack-content');
-  attCorrect = 0;
-  clearInterval(attTimer);
-
+  attCorrect = 0; clearInterval(attTimer);
   if (!cfg.gasUrl) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">⚙️</div>
+    el.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div>
       <div class="empty-text">設定からGAS URLを入力してください</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="showScreen('settings')">設定を開く →</button></div>`;
     return;
   }
-
-  // 現在のChapterのフレーズを取得
-  const currentCh = chapterOf(viewingDay) || 1;
+  const currentCh = viewingDay > 0 ? chapterOf(viewingDay) : 1;
   el.innerHTML = '<div class="status-msg">フレーズを取得中...</div>';
-  const r = await gas({action:'getPhrases', chapter: currentCh});
-
-  if (!r || !r.phrases || r.phrases.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
-      <div class="empty-text">Chapter ${currentCh} のフレーズがまだありません。<br>GSSにフレーズを追加してください。</div>
+  const r = await gas({action:'getPhrases', chapter:currentCh});
+  if (!r || !r.phrases || r.phrases.length===0) {
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
+      <div class="empty-text">Chapter ${currentCh} のフレーズがまだありません。</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button></div>`;
     return;
   }
-
-  phrases = r.phrases.filter(p => p.Phrase_JP && p.Phrase_EN).sort(() => Math.random() - 0.5);
-  if (phrases.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="empty-icon">📝</div>
+  phrases = r.phrases.filter(p=>p.Phrase_JP&&p.Phrase_EN).sort(()=>Math.random()-.5);
+  if (phrases.length===0) {
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
       <div class="empty-text">Phrase_JPとPhrase_ENが入力されているフレーズがありません。</div></div>`;
     return;
   }
-
-  phraseStates = phrases.map(p => ({phrase:p, mastery:0, skipCounter:0}));
+  phraseStates = phrases.map(p=>({phrase:p, mastery:0, skipCounter:0}));
   renderAttackQ();
 }
 
-function activeCount() { return phraseStates.filter(s => s.mastery < 2).length; }
-
-function getNextState() {
-  const active = phraseStates.filter(s => s.mastery < 2);
-  if (active.length === 0) return null;
-  const urgent = active.filter(s => s.mastery === 0);
-  if (urgent.length > 0) return urgent[Math.floor(Math.random() * urgent.length)];
-  const ready = active.filter(s => s.mastery === 1 && s.skipCounter % 2 === 0);
-  if (ready.length > 0) return ready[Math.floor(Math.random() * ready.length)];
-  active.forEach(s => { if (s.mastery === 1) s.skipCounter++; });
-  return active[Math.floor(Math.random() * active.length)];
+function activeCount(){ return phraseStates.filter(s=>s.mastery<2).length; }
+function getNextState(){
+  const active = phraseStates.filter(s=>s.mastery<2);
+  if (active.length===0) return null;
+  const urgent = active.filter(s=>s.mastery===0);
+  if (urgent.length>0) return urgent[Math.floor(Math.random()*urgent.length)];
+  const ready = active.filter(s=>s.mastery===1&&s.skipCounter%2===0);
+  if (ready.length>0) return ready[Math.floor(Math.random()*ready.length)];
+  active.forEach(s=>{ if(s.mastery===1) s.skipCounter++; });
+  return active[Math.floor(Math.random()*active.length)];
 }
 
-function renderAttackQ() {
+function renderAttackQ(){
   clearInterval(attTimer);
   const state = getNextState();
-  if (!state) { renderAttackResult(); return; }
-
-  attSecs = 10; attRevealed = false;
-  const p = state.phrase;
-  const remaining = activeCount();
-  const mastered  = phraseStates.filter(s => s.mastery >= 2).length;
-
-  document.getElementById('attack-content').innerHTML = `
+  if (!state){ renderAttackResult(); return; }
+  attSecs=10; attRevealed=false;
+  const p=state.phrase;
+  const remaining=activeCount();
+  const mastered=phraseStates.filter(s=>s.mastery>=2).length;
+  document.getElementById('attack-content').innerHTML=`
     <div class="score-row">
       <div class="score-item"><div class="score-val">${remaining}</div><div class="score-lbl">残り</div></div>
       <div class="score-item"><div class="score-val" style="color:#4a7d1a">${mastered}</div><div class="score-lbl">習得済み</div></div>
@@ -629,56 +528,46 @@ function renderAttackQ() {
       <div class="ring-num" id="att-num">10</div>
     </div>
     <button class="btn btn-green" id="att-btn" onclick="revealAttack()">答えを見る</button>`;
-
   window._currentState = state;
-
-  attTimer = setInterval(() => {
+  attTimer=setInterval(()=>{
     attSecs--;
-    const ring = document.getElementById('att-ring');
-    const num  = document.getElementById('att-num');
-    if (!ring) { clearInterval(attTimer); return; }
-    ring.style.strokeDashoffset = (CIRC_SMALL * (1 - attSecs/10)).toFixed(1);
-    num.textContent = attSecs;
-    if (attSecs <= 3) { ring.classList.add('urgent'); num.classList.add('urgent'); }
-    if (attSecs <= 0) { clearInterval(attTimer); revealAttack(); }
-  }, 1000);
+    const ring=document.getElementById('att-ring'),num=document.getElementById('att-num');
+    if(!ring){clearInterval(attTimer);return;}
+    ring.style.strokeDashoffset=(CIRC_SMALL*(1-attSecs/10)).toFixed(1);
+    num.textContent=attSecs;
+    if(attSecs<=3){ring.classList.add('urgent');num.classList.add('urgent');}
+    if(attSecs<=0){clearInterval(attTimer);revealAttack();}
+  },1000);
 }
 
-function revealAttack() {
-  if (attRevealed) return;
-  clearInterval(attTimer); attRevealed = true;
+function revealAttack(){
+  if(attRevealed)return;
+  clearInterval(attTimer); attRevealed=true;
   document.getElementById('att-en').classList.add('show');
-  const btn = document.getElementById('att-btn');
-  if (btn) btn.style.display = 'none';
-  const wrap = document.createElement('div');
-  wrap.className = 'btn-grid'; wrap.style.marginTop = '0';
-  wrap.innerHTML = `
-    <button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
-    <button class="btn btn-gray"  onclick="scoreAtt(false)">❌ 言えなかった</button>`;
+  const btn=document.getElementById('att-btn');
+  if(btn)btn.style.display='none';
+  const wrap=document.createElement('div');
+  wrap.className='btn-grid'; wrap.style.marginTop='0';
+  wrap.innerHTML=`<button class="btn btn-green" onclick="scoreAtt(true)">✅ 言えた</button>
+    <button class="btn btn-gray" onclick="scoreAtt(false)">❌ 言えなかった</button>`;
   document.getElementById('attack-content').appendChild(wrap);
 }
 
-function scoreAtt(ok) {
-  const state = window._currentState;
-  if (!state) { renderAttackQ(); return; }
-  if (ok) {
-    state.mastery = Math.min(2, state.mastery + 1);
-    state.skipCounter = 0;
-  } else {
-    state.mastery = 0;
-    state.skipCounter = 0;
-  }
-  phraseStates.forEach(s => { if (s.mastery === 1 && s !== state) s.skipCounter++; });
+function scoreAtt(ok){
+  const state=window._currentState;
+  if(!state){renderAttackQ();return;}
+  if(ok){ state.mastery=Math.min(2,state.mastery+1); state.skipCounter=0; }
+  else  { state.mastery=0; state.skipCounter=0; }
+  phraseStates.forEach(s=>{ if(s.mastery===1&&s!==state) s.skipCounter++; });
   renderAttackQ();
 }
 
-function renderAttackResult() {
-  const total   = phrases.length;
-  const mastered = phraseStates.filter(s => s.mastery >= 2).length;
-  const pct     = Math.round(mastered / total * 100);
-  const emoji   = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
-  const msg     = pct >= 80 ? '素晴らしい！全部習得しました 🌟' : pct >= 50 ? 'いい調子！続けましょう 💪' : 'まだ練習が必要です。もう一回！ 📖';
-  document.getElementById('attack-content').innerHTML = `
+function renderAttackResult(){
+  const total=phrases.length, mastered=phraseStates.filter(s=>s.mastery>=2).length;
+  const pct=Math.round(mastered/total*100);
+  const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
+  const msg=pct>=80?'素晴らしい！全部習得しました 🌟':pct>=50?'いい調子！続けましょう 💪':'まだ練習が必要です。もう一回！ 📖';
+  document.getElementById('attack-content').innerHTML=`
     <div class="result-card">
       <div style="font-size:48px;margin-bottom:12px;">${emoji}</div>
       <div class="card-label">習得状況</div>
@@ -687,7 +576,7 @@ function renderAttackResult() {
       <div class="result-msg">${msg}</div>
     </div>
     <button class="btn btn-green" onclick="initAttack()">もう一回（リセット）</button>
-    <button class="btn btn-gray"  onclick="showScreen('home')">ホームへ</button>`;
+    <button class="btn btn-gray" onclick="showScreen('home')">ホームへ</button>`;
 }
 
 // =============================================
@@ -743,7 +632,7 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 
 applyUrlParams();
 loadCfg();
-viewingDay = 0; // renderHome時にcurrentDayにリセット
+viewingDay=0;
 renderHome();
 </script>
 </body>
