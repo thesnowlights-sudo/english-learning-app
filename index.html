@@ -276,6 +276,7 @@ function closeQR(e) {
 async function gas(params) {
   if (!cfg.gasUrl) return null;
   try {
+    params._t = Date.now(); // ← キャッシュ防止
     const url = cfg.gasUrl + '?' + new URLSearchParams(params).toString();
     const res = await fetch(url, {redirect:'follow'});
     return await res.json();
