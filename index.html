@@ -74,6 +74,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .score-item{text-align:center;}
 .score-val{font-size:28px;font-weight:700;color:#2c2c2a;}
 .score-lbl{font-size:11px;color:#888780;margin-top:2px;}
+.attack-mode-badge{text-align:center;font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;margin-bottom:12px;display:inline-block;}
+.attack-mode-chapter{background:#e8f4fd;color:#1a6fa8;}
+.attack-mode-all{background:#f0f7e8;color:#3a6c10;}
 .transcript{background:#ede9e0;border-radius:12px;padding:16px;min-height:100px;font-size:15px;color:#5f5e5a;line-height:1.7;margin-top:16px;white-space:pre-wrap;}
 .rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#e24b4a;margin-right:6px;animation:blink 1s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
@@ -112,7 +115,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 
 <div class="screen" id="screen-attack">
   <div class="topbar">
-    <div class="topbar-sub">弱いものを集中トレーニング</div>
+    <div class="topbar-sub" id="attack-sub">トレーニング</div>
     <div class="topbar-title">タイムアタック</div>
   </div>
   <div class="content" id="attack-content"></div>
@@ -166,7 +169,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
   <div class="bnav-item on" id="nav-home" onclick="showScreen('home')">
     <div class="bnav-icon">🏠</div><div class="bnav-label">ホーム</div>
   </div>
-  <div class="bnav-item" id="nav-attack" onclick="showScreen('attack')">
+  <div class="bnav-item" id="nav-attack" onclick="startAttackAll()">
     <div class="bnav-icon">⚡</div><div class="bnav-label">タイムアタック</div>
   </div>
   <div class="bnav-item" id="nav-speech" onclick="showScreen('speech')">
@@ -197,7 +200,7 @@ const DAY_TYPES = {
   2:{label:'軽く使う', desc:'フレーズを声に出して自分の言葉で使ってみる', steps:[
     {text:'GSSのフレーズを声に出して全部読む', link:'gss'},
     {text:'気に入ったフレーズで1〜2文、自分の状況に合わせて作る', link:null},
-    {text:'タイムアタックで定着を確認する', link:'attack'},
+    {text:'タイムアタックで定着を確認する', link:'attack-chapter'},
   ]},
   3:{label:'会話（メイン）', desc:'GPTと英語で3〜5分会話する', steps:[
     {text:"GPTを開いて英語で話しかける（例：Let's talk about Indian food!）", link:'gpt'},
@@ -206,7 +209,7 @@ const DAY_TYPES = {
   ]},
   4:{label:'復習', desc:'今週のフレーズをまとめて定着させる', steps:[
     {text:'GSSのフレーズを最初から全部声に出して音読する', link:'gss'},
-    {text:'タイムアタックで苦手なものを重点的に練習する', link:'attack'},
+    {text:'タイムアタックで苦手なものを重点的に練習する', link:'attack-chapter'},
     {text:'🟢 習得済みになるまで繰り返す', link:null},
   ]},
   5:{label:'1分スピーチ', desc:'今週学んだ表現を全部使って1分話し続ける', steps:[
@@ -223,6 +226,9 @@ function chapterOf(d)    { return Math.ceil(d / 5); }
 function dayInChapter(d) { return ((d - 1) % 5) + 1; }
 
 let viewingDay = 0;
+// タイムアタックのモード：'chapter'=今のChapterのみ, 'all'=全フレーズ
+let attackMode = 'all';
+let attackChapter = 1;
 
 function applyUrlParams() {
   const p = new URLSearchParams(location.search);
@@ -276,7 +282,7 @@ function closeQR(e) {
 async function gas(params) {
   if (!cfg.gasUrl) return null;
   try {
-    params._t = Date.now(); // ← キャッシュ防止
+    params._t = Date.now();
     const url = cfg.gasUrl + '?' + new URLSearchParams(params).toString();
     const res = await fetch(url, {redirect:'follow'});
     return await res.json();
@@ -286,11 +292,29 @@ function openUrl(url) {
   if (!url || url === '#') { alert('設定でURLを入力してください'); return; }
   window.open(url, '_blank');
 }
+
+// ナビバーからのタイムアタック → 全フレーズモード
+function startAttackAll() {
+  attackMode    = 'all';
+  attackChapter = null;
+  document.getElementById('attack-sub').textContent = '全フレーズ総復習';
+  showScreen('attack');
+}
+
+// ステップリンクからのタイムアタック → 今のChapterのみ
+function startAttackChapter() {
+  attackMode    = 'chapter';
+  attackChapter = chapterOf(viewingDay) || 1;
+  document.getElementById('attack-sub').textContent = `Chapter ${attackChapter} のフレーズ`;
+  showScreen('attack');
+}
+
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.bnav-item').forEach(n => n.classList.remove('on'));
   document.getElementById('screen-' + name).classList.add('active');
-  document.getElementById('nav-'    + name).classList.add('on');
+  const navId = name === 'attack' ? 'nav-attack' : 'nav-' + name;
+  if (document.getElementById(navId)) document.getElementById(navId).classList.add('on');
   if (name === 'home')     renderHome();
   if (name === 'attack')   initAttack();
   if (name === 'settings') loadSettingsForm();
@@ -307,7 +331,6 @@ async function renderHome() {
     const r = await gas({action:'getProgress'});
     if (r && r.completedDays) completedDays = new Set(r.completedDays.map(Number));
   }
-  // 最初の未完了Day
   let currentDay = 1;
   for (let d = 1; d <= TOTAL_DAYS; d++) {
     if (!completedDays.has(d)) { currentDay = d; break; }
@@ -324,11 +347,9 @@ function renderHomeContent(currentDay) {
   const chapter = CHAPTERS[ch - 1];
   const task    = DAY_TYPES[dayType];
   const isDone  = completedDays.has(d);
-
-  // ★ バグ修正：Day1は常にcurrent、それ以外は完了済み最大+1まで
   const maxDone = completedDays.size > 0 ? Math.max(...completedDays) : 0;
   let status = 'future';
-  if (isDone)                        status = 'done';
+  if (isDone)                           status = 'done';
   else if (d === 1 || d <= maxDone + 1) status = 'current';
 
   document.getElementById('home-title').textContent = `Chapter ${ch} · Day ${d}`;
@@ -337,11 +358,10 @@ function renderHomeContent(currentDay) {
 
   let html = '';
 
-  // Dayナビ
   const statusLabel =
-    isDone          ? '<span class="day-nav-badge badge-done-small">✅ 完了</span>' :
+    isDone             ? '<span class="day-nav-badge badge-done-small">✅ 完了</span>' :
     status==='current' ? '<span class="day-nav-badge badge-current">▶ 今ここ</span>' :
-                      '<span class="day-nav-badge badge-future-small">🔒 まだ先</span>';
+                         '<span class="day-nav-badge badge-future-small">🔒 まだ先</span>';
 
   html += `<div class="day-nav">
     <button class="day-nav-btn" onclick="navDay(-1)" ${d>1?'':'disabled'}>◀</button>
@@ -353,7 +373,6 @@ function renderHomeContent(currentDay) {
     <button class="day-nav-btn" onclick="navDay(+1)" ${d<TOTAL_DAYS?'':'disabled'}>▶</button>
   </div>`;
 
-  // 全体進捗
   html += `<div class="card">
     <div class="card-label">全体進捗</div>
     <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px;">
@@ -365,12 +384,12 @@ function renderHomeContent(currentDay) {
     <div class="pbar-label">残り ${TOTAL_DAYS - totalDone} Day</div>
   </div>`;
 
-  // タスクカード
   html += `<div class="card">
     <div class="card-label">Day ${d} のタスク</div>
     <div style="font-size:17px;font-weight:700;margin-bottom:4px;">${task.label}</div>
     <div class="card-sub">${task.desc}</div>
     <div class="step-list">`;
+
   task.steps.forEach((step, i) => {
     html += `<div class="step-item">
       <div class="step-num">${i+1}</div>
@@ -379,14 +398,15 @@ function renderHomeContent(currentDay) {
       html += `<br><button class="step-link" onclick="openUrl('${cfg.gptUrl}')">GPTを開く →</button>`;
     else if (step.link === 'gss')
       html += `<br><button class="step-link" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button>`;
-    else if (step.link === 'attack')
-      html += `<br><button class="step-link" onclick="showScreen('attack')">タイムアタック →</button>`;
+    else if (step.link === 'attack-chapter')
+      // ★ このChapterのフレーズだけ
+      html += `<br><button class="step-link" onclick="startAttackChapter()">タイムアタック →</button>`;
     else if (step.link === 'speech')
       html += `<br><button class="step-link" onclick="showScreen('speech')">スピーチ →</button>`;
     html += `</div></div>`;
   });
-  html += `</div><div style="margin-top:16px;">`;
 
+  html += `</div><div style="margin-top:16px;">`;
   if (isDone) {
     html += `<span class="badge-done">✅ Day ${d} 完了！</span>`;
     if (d < TOTAL_DAYS)
@@ -398,12 +418,11 @@ function renderHomeContent(currentDay) {
   }
   html += `</div></div>`;
 
-  // Chapterドット
   html += `<div class="card"><div class="card-label">Chapter 進捗</div><div class="chapter-dots">`;
   for (let c = 1; c <= 8; c++) {
-    const cs = (c-1)*5+1, ce = c*5;
-    const cd = [...completedDays].filter(x => x>=cs && x<=ce).length;
-    const cls = cd>=5 ? 'ch-dot-done' : c===chapterOf(viewingDay) ? 'ch-dot-now' : 'ch-dot-future';
+    const cs=(c-1)*5+1, ce=c*5;
+    const cd=[...completedDays].filter(x=>x>=cs&&x<=ce).length;
+    const cls=cd>=5?'ch-dot-done':c===chapterOf(viewingDay)?'ch-dot-now':'ch-dot-future';
     html += `<div class="ch-dot ${cls}" onclick="jumpToChapter(${c})">Ch${c} ${cd}/5</div>`;
   }
   html += `</div></div>`;
@@ -464,53 +483,82 @@ let phrases=[], phraseStates=[], attCorrect=0, attTimer=null, attSecs=10, attRev
 
 async function initAttack() {
   const el = document.getElementById('attack-content');
-  attCorrect = 0; clearInterval(attTimer);
+  attCorrect=0; clearInterval(attTimer);
+
   if (!cfg.gasUrl) {
     el.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div>
       <div class="empty-text">設定からGAS URLを入力してください</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="showScreen('settings')">設定を開く →</button></div>`;
     return;
   }
-  const currentCh = viewingDay > 0 ? chapterOf(viewingDay) : 1;
+
   el.innerHTML = '<div class="status-msg">フレーズを取得中...</div>';
-  const r = await gas({action:'getPhrases', chapter:currentCh});
+
+  let r;
+  if (attackMode === 'chapter') {
+    // 今のChapterのみ
+    r = await gas({action:'getPhrases', chapter: attackChapter});
+  } else {
+    // 全フレーズ（chapterパラメータなし＝全件取得）
+    r = await gas({action:'getPhrases'});
+  }
+
+  const modeLabel = attackMode === 'chapter'
+    ? `Chapter ${attackChapter} のフレーズ`
+    : '全フレーズ 総復習';
+
   if (!r || !r.phrases || r.phrases.length===0) {
     el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
-      <div class="empty-text">Chapter ${currentCh} のフレーズがまだありません。</div>
+      <div class="empty-text">フレーズがまだありません。</div>
       <button class="btn btn-outline" style="margin-top:16px;" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button></div>`;
     return;
   }
-  phrases = r.phrases.filter(p=>p.Phrase_JP&&p.Phrase_EN).sort(()=>Math.random()-.5);
+
+  phrases=r.phrases.filter(p=>p.Phrase_JP&&p.Phrase_EN).sort(()=>Math.random()-.5);
   if (phrases.length===0) {
     el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
       <div class="empty-text">Phrase_JPとPhrase_ENが入力されているフレーズがありません。</div></div>`;
     return;
   }
-  phraseStates = phrases.map(p=>({phrase:p, mastery:0, skipCounter:0}));
+
+  phraseStates=phrases.map(p=>({phrase:p, mastery:0, skipCounter:0}));
+
+  // モードバッジをコンテンツ先頭に表示
+  const badgeClass = attackMode==='chapter' ? 'attack-mode-chapter' : 'attack-mode-all';
+  const badgeIcon  = attackMode==='chapter' ? '📖' : '🌐';
+  el.innerHTML = `<div style="text-align:center;margin-bottom:4px;">
+    <span class="attack-mode-badge ${badgeClass}">${badgeIcon} ${modeLabel}（${phrases.length}フレーズ）</span>
+  </div>`;
+
   renderAttackQ();
 }
 
 function activeCount(){ return phraseStates.filter(s=>s.mastery<2).length; }
 function getNextState(){
-  const active = phraseStates.filter(s=>s.mastery<2);
-  if (active.length===0) return null;
-  const urgent = active.filter(s=>s.mastery===0);
-  if (urgent.length>0) return urgent[Math.floor(Math.random()*urgent.length)];
-  const ready = active.filter(s=>s.mastery===1&&s.skipCounter%2===0);
-  if (ready.length>0) return ready[Math.floor(Math.random()*ready.length)];
+  const active=phraseStates.filter(s=>s.mastery<2);
+  if(active.length===0) return null;
+  const urgent=active.filter(s=>s.mastery===0);
+  if(urgent.length>0) return urgent[Math.floor(Math.random()*urgent.length)];
+  const ready=active.filter(s=>s.mastery===1&&s.skipCounter%2===0);
+  if(ready.length>0) return ready[Math.floor(Math.random()*ready.length)];
   active.forEach(s=>{ if(s.mastery===1) s.skipCounter++; });
   return active[Math.floor(Math.random()*active.length)];
 }
 
 function renderAttackQ(){
   clearInterval(attTimer);
-  const state = getNextState();
-  if (!state){ renderAttackResult(); return; }
+  const state=getNextState();
+  if(!state){ renderAttackResult(); return; }
   attSecs=10; attRevealed=false;
   const p=state.phrase;
   const remaining=activeCount();
   const mastered=phraseStates.filter(s=>s.mastery>=2).length;
-  document.getElementById('attack-content').innerHTML=`
+
+  const el = document.getElementById('attack-content');
+  // モードバッジは残したまま問題を追加
+  const badge = el.querySelector('.attack-mode-badge') ? el.innerHTML.split('</div>')[0]+'</div>' : '';
+
+  el.innerHTML = badge + `
     <div class="score-row">
       <div class="score-item"><div class="score-val">${remaining}</div><div class="score-lbl">残り</div></div>
       <div class="score-item"><div class="score-val" style="color:#4a7d1a">${mastered}</div><div class="score-lbl">習得済み</div></div>
@@ -529,7 +577,8 @@ function renderAttackQ(){
       <div class="ring-num" id="att-num">10</div>
     </div>
     <button class="btn btn-green" id="att-btn" onclick="revealAttack()">答えを見る</button>`;
-  window._currentState = state;
+
+  window._currentState=state;
   attTimer=setInterval(()=>{
     attSecs--;
     const ring=document.getElementById('att-ring'),num=document.getElementById('att-num');
@@ -557,14 +606,14 @@ function revealAttack(){
 function scoreAtt(ok){
   const state=window._currentState;
   if(!state){renderAttackQ();return;}
-  if(ok){ state.mastery=Math.min(2,state.mastery+1); state.skipCounter=0; }
-  else  { state.mastery=0; state.skipCounter=0; }
-  phraseStates.forEach(s=>{ if(s.mastery===1&&s!==state) s.skipCounter++; });
+  if(ok){state.mastery=Math.min(2,state.mastery+1);state.skipCounter=0;}
+  else  {state.mastery=0;state.skipCounter=0;}
+  phraseStates.forEach(s=>{if(s.mastery===1&&s!==state)s.skipCounter++;});
   renderAttackQ();
 }
 
 function renderAttackResult(){
-  const total=phrases.length, mastered=phraseStates.filter(s=>s.mastery>=2).length;
+  const total=phrases.length,mastered=phraseStates.filter(s=>s.mastery>=2).length;
   const pct=Math.round(mastered/total*100);
   const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
   const msg=pct>=80?'素晴らしい！全部習得しました 🌟':pct>=50?'いい調子！続けましょう 💪':'まだ練習が必要です。もう一回！ 📖';
@@ -586,12 +635,12 @@ function renderAttackResult(){
 let spTimer=null,spSecs=60,spRunning=false,spRec=null,spText='';
 function toggleSpeech(){spRunning?stopSpeech():startSpeech();}
 function startSpeech(){
-  spRunning=true; spText='';
+  spRunning=true;spText='';
   document.getElementById('speech-btn').textContent='録音停止';
   document.getElementById('transcript').innerHTML='<span class="rec-dot"></span>聞いています...';
   if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
     const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    spRec=new SR(); spRec.lang='en-US'; spRec.continuous=true; spRec.interimResults=true;
+    spRec=new SR();spRec.lang='en-US';spRec.continuous=true;spRec.interimResults=true;
     spRec.onresult=e=>{
       let interim='',final=spText;
       for(let i=e.resultIndex;i<e.results.length;i++){
@@ -601,7 +650,7 @@ function startSpeech(){
       spText=final;
       document.getElementById('transcript').textContent=(final+interim)||'聞いています...';
     };
-    spRec.onerror=()=>{}; spRec.start();
+    spRec.onerror=()=>{};spRec.start();
   }
   spTimer=setInterval(()=>{
     spSecs--;
@@ -615,17 +664,17 @@ function startSpeech(){
   },1000);
 }
 function stopSpeech(){
-  spRunning=false; clearInterval(spTimer);
+  spRunning=false;clearInterval(spTimer);
   if(spRec){try{spRec.stop();}catch(e){}spRec=null;}
   document.getElementById('speech-btn').textContent='録音開始';
   if(spText.trim())document.getElementById('transcript').textContent=spText.trim();
 }
 function resetSpeech(){
-  stopSpeech(); spSecs=60; spText='';
+  stopSpeech();spSecs=60;spText='';
   const ring=document.getElementById('speech-ring'),num=document.getElementById('speech-num'),btn=document.getElementById('speech-btn');
-  ring.style.strokeDashoffset='0'; ring.classList.remove('urgent');
-  num.textContent='1:00'; num.classList.remove('urgent');
-  btn.textContent='録音開始'; btn.disabled=false;
+  ring.style.strokeDashoffset='0';ring.classList.remove('urgent');
+  num.textContent='1:00';num.classList.remove('urgent');
+  btn.textContent='録音開始';btn.disabled=false;
   document.getElementById('transcript').textContent='ここに文字起こしが表示されます...';
 }
 
