@@ -565,9 +565,21 @@ function renderAttackQ(){
       <div class="score-item"><div class="score-val">${phrases.length}</div><div class="score-lbl">合計</div></div>
     </div>
     <div class="phrase-card">
-      <div class="phrase-jp">${escHtml(p.Phrase_JP)}</div>
-      <div class="phrase-en" id="att-en">${escHtml(p.Phrase_EN)}</div>
-    </div>
+  <div class="phrase-jp">${escHtml(p.Phrase_JP)}</div>
+  <div class="phrase-en" id="att-en">${escHtml(p.Phrase_EN)}</div>
+  <button onclick="speakEN(${JSON.stringify(p.Phrase_EN)})" 
+    style="margin-top:14px;background:#f0f7e8;border:none;border-radius:20px;padding:6px 16px;font-size:13px;font-weight:600;color:#4a7d1a;cursor:pointer;">
+    🔊 発音を聞く
+  </button>
+</div>
+
+function speakEN(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.9;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
     <div class="ring-wrap">
       <svg viewBox="0 0 120 120" width="120" height="120">
         <circle class="ring-track" cx="60" cy="60" r="52"/>
