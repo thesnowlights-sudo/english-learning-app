@@ -59,10 +59,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Noto Sans JP'
 .bnav-label{font-size:10px;color:#aaa9a0;}
 .bnav-item.on .bnav-icon,.bnav-item.on .bnav-label{color:#4a7d1a;}
 .bnav-item.on .bnav-label{font-weight:700;}
-.phrase-card{background:#fff;border-radius:20px;padding:36px 24px;text-align:center;margin-bottom:20px;border:0.5px solid #e5e2da;min-height:170px;display:flex;flex-direction:column;justify-content:center;}
+.phrase-card{background:#fff;border-radius:20px;padding:28px 24px;text-align:center;margin-bottom:20px;border:0.5px solid #e5e2da;min-height:170px;display:flex;flex-direction:column;justify-content:center;align-items:center;}
 .phrase-jp{font-size:22px;font-weight:700;color:#2c2c2a;line-height:1.4;}
 .phrase-en{font-size:17px;font-weight:600;color:#4a7d1a;margin-top:16px;display:none;line-height:1.4;}
 .phrase-en.show{display:block;}
+.speak-btn{margin-top:14px;background:#f0f7e8;border:none;border-radius:20px;padding:7px 18px;font-size:13px;font-weight:600;color:#4a7d1a;cursor:pointer;transition:background .15s;}
+.speak-btn:active{background:#c5df98;}
 .ring-wrap{width:130px;height:130px;margin:0 auto 20px;position:relative;}
 .ring-wrap svg{transform:rotate(-90deg);}
 .ring-track{fill:none;stroke:#ede9e0;stroke-width:9;}
@@ -225,10 +227,9 @@ const CIRC_BIG   = 2 * Math.PI * 56;
 function chapterOf(d)    { return Math.ceil(d / 5); }
 function dayInChapter(d) { return ((d - 1) % 5) + 1; }
 
-let viewingDay = 0;
-// タイムアタックのモード：'chapter'=今のChapterのみ, 'all'=全フレーズ
-let attackMode = 'all';
-let attackChapter = 1;
+let viewingDay    = 0;
+let attackMode    = 'all';
+let attackChapter = null;
 
 function applyUrlParams() {
   const p = new URLSearchParams(location.search);
@@ -293,15 +294,21 @@ function openUrl(url) {
   window.open(url, '_blank');
 }
 
-// ナビバーからのタイムアタック → 全フレーズモード
+// ★ 英語読み上げ
+function speakEN(text) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+
 function startAttackAll() {
   attackMode    = 'all';
   attackChapter = null;
   document.getElementById('attack-sub').textContent = '全フレーズ総復習';
   showScreen('attack');
 }
-
-// ステップリンクからのタイムアタック → 今のChapterのみ
 function startAttackChapter() {
   attackMode    = 'chapter';
   attackChapter = chapterOf(viewingDay) || 1;
@@ -399,7 +406,6 @@ function renderHomeContent(currentDay) {
     else if (step.link === 'gss')
       html += `<br><button class="step-link" onclick="openUrl('${cfg.gssUrl}')">GSSを開く →</button>`;
     else if (step.link === 'attack-chapter')
-      // ★ このChapterのフレーズだけ
       html += `<br><button class="step-link" onclick="startAttackChapter()">タイムアタック →</button>`;
     else if (step.link === 'speech')
       html += `<br><button class="step-link" onclick="showScreen('speech')">スピーチ →</button>`;
@@ -448,7 +454,6 @@ function navDay(delta) {
   }
   renderHomeContent(currentDay);
 }
-
 function jumpToChapter(ch) {
   viewingDay = (ch-1)*5+1;
   let currentDay = 1;
@@ -457,7 +462,6 @@ function jumpToChapter(ch) {
   }
   renderHomeContent(currentDay);
 }
-
 async function markDone(dayNum) {
   if (!cfg.gasUrl) { showScreen('settings'); return; }
   const ch   = chapterOf(dayNum);
@@ -484,6 +488,7 @@ let phrases=[], phraseStates=[], attCorrect=0, attTimer=null, attSecs=10, attRev
 async function initAttack() {
   const el = document.getElementById('attack-content');
   attCorrect=0; clearInterval(attTimer);
+  speechSynthesis.cancel();
 
   if (!cfg.gasUrl) {
     el.innerHTML=`<div class="empty"><div class="empty-icon">⚙️</div>
@@ -496,16 +501,16 @@ async function initAttack() {
 
   let r;
   if (attackMode === 'chapter') {
-    // 今のChapterのみ
     r = await gas({action:'getPhrases', chapter: attackChapter});
   } else {
-    // 全フレーズ（chapterパラメータなし＝全件取得）
     r = await gas({action:'getPhrases'});
   }
 
   const modeLabel = attackMode === 'chapter'
     ? `Chapter ${attackChapter} のフレーズ`
     : '全フレーズ 総復習';
+  const badgeClass = attackMode === 'chapter' ? 'attack-mode-chapter' : 'attack-mode-all';
+  const badgeIcon  = attackMode === 'chapter' ? '📖' : '🌐';
 
   if (!r || !r.phrases || r.phrases.length===0) {
     el.innerHTML=`<div class="empty"><div class="empty-icon">📝</div>
@@ -522,14 +527,9 @@ async function initAttack() {
   }
 
   phraseStates=phrases.map(p=>({phrase:p, mastery:0, skipCounter:0}));
-
-  // モードバッジをコンテンツ先頭に表示
-  const badgeClass = attackMode==='chapter' ? 'attack-mode-chapter' : 'attack-mode-all';
-  const badgeIcon  = attackMode==='chapter' ? '📖' : '🌐';
-  el.innerHTML = `<div style="text-align:center;margin-bottom:4px;">
+  el.innerHTML=`<div style="text-align:center;margin-bottom:4px;">
     <span class="attack-mode-badge ${badgeClass}">${badgeIcon} ${modeLabel}（${phrases.length}フレーズ）</span>
   </div>`;
-
   renderAttackQ();
 }
 
@@ -547,6 +547,7 @@ function getNextState(){
 
 function renderAttackQ(){
   clearInterval(attTimer);
+  speechSynthesis.cancel();
   const state=getNextState();
   if(!state){ renderAttackResult(); return; }
   attSecs=10; attRevealed=false;
@@ -554,32 +555,24 @@ function renderAttackQ(){
   const remaining=activeCount();
   const mastered=phraseStates.filter(s=>s.mastery>=2).length;
 
-  const el = document.getElementById('attack-content');
-  // モードバッジは残したまま問題を追加
-  const badge = el.querySelector('.attack-mode-badge') ? el.innerHTML.split('</div>')[0]+'</div>' : '';
+  const el=document.getElementById('attack-content');
+  const badge=el.querySelector('.attack-mode-badge');
+  const badgeHTML=badge ? `<div style="text-align:center;margin-bottom:4px;">${badge.outerHTML}</div>` : '';
 
-  el.innerHTML = badge + `
+  // JSON.stringifyでシングルクォート問題を回避
+  const phraseEnJson=JSON.stringify(p.Phrase_EN);
+
+  el.innerHTML=badgeHTML+`
     <div class="score-row">
       <div class="score-item"><div class="score-val">${remaining}</div><div class="score-lbl">残り</div></div>
       <div class="score-item"><div class="score-val" style="color:#4a7d1a">${mastered}</div><div class="score-lbl">習得済み</div></div>
       <div class="score-item"><div class="score-val">${phrases.length}</div><div class="score-lbl">合計</div></div>
     </div>
     <div class="phrase-card">
-  <div class="phrase-jp">${escHtml(p.Phrase_JP)}</div>
-  <div class="phrase-en" id="att-en">${escHtml(p.Phrase_EN)}</div>
-  <button onclick="speakEN(${JSON.stringify(p.Phrase_EN)})" 
-    style="margin-top:14px;background:#f0f7e8;border:none;border-radius:20px;padding:6px 16px;font-size:13px;font-weight:600;color:#4a7d1a;cursor:pointer;">
-    🔊 発音を聞く
-  </button>
-</div>
-
-function speakEN(text) {
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-US';
-  u.rate = 0.9;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
-}
+      <div class="phrase-jp">${escHtml(p.Phrase_JP)}</div>
+      <div class="phrase-en" id="att-en">${escHtml(p.Phrase_EN)}</div>
+      <button class="speak-btn" id="speak-btn" onclick="speakEN(${phraseEnJson})">🔊 発音を聞く</button>
+    </div>
     <div class="ring-wrap">
       <svg viewBox="0 0 120 120" width="120" height="120">
         <circle class="ring-track" cx="60" cy="60" r="52"/>
@@ -605,7 +598,11 @@ function speakEN(text) {
 function revealAttack(){
   if(attRevealed)return;
   clearInterval(attTimer); attRevealed=true;
-  document.getElementById('att-en').classList.add('show');
+  const enEl=document.getElementById('att-en');
+  enEl.classList.add('show');
+  // 答えを表示したら自動で読み上げ
+  const text=enEl.textContent;
+  speakEN(text);
   const btn=document.getElementById('att-btn');
   if(btn)btn.style.display='none';
   const wrap=document.createElement('div');
@@ -616,6 +613,7 @@ function revealAttack(){
 }
 
 function scoreAtt(ok){
+  speechSynthesis.cancel();
   const state=window._currentState;
   if(!state){renderAttackQ();return;}
   if(ok){state.mastery=Math.min(2,state.mastery+1);state.skipCounter=0;}
@@ -625,6 +623,7 @@ function scoreAtt(ok){
 }
 
 function renderAttackResult(){
+  speechSynthesis.cancel();
   const total=phrases.length,mastered=phraseStates.filter(s=>s.mastery>=2).length;
   const pct=Math.round(mastered/total*100);
   const emoji=pct>=80?'🎉':pct>=50?'💪':'📚';
